@@ -9,8 +9,10 @@ import authService from './services/auth';
 import nativeToast from 'native-toast'
 import Example from './components/Example';
 import Flash from './components/Flash';
-import dataFilter from './components/dataFilter';
+import dataFilter from './components/dataFilterr';
 import dataGrid from './components/dataGrid';
+import VeeValidate from 'vee-validate';
+
 
 // import Meta from 'vue-meta';
 window.baseUrl = "http://apigatewaymock.test/api";
@@ -64,7 +66,7 @@ Vue.component('example-component', Example);
 Vue.component('flash', Flash);
 Vue.component('data-filter', dataFilter);
 Vue.component('data-grid', dataGrid);
-
+Vue.use(VeeValidate);
 Vue.mixin({
     data() {
         return {

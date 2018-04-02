@@ -10,14 +10,24 @@
                         <div class="form-group row">
                             <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" v-model="login.email" required autofocus>
+                                <input v-validate="'required|email'"
+                                       id="email" type="email"
+                                       class="form-control" name="email"
+                                       :class="{'is-invalid': errors.has('email') }"
+                                       v-model="login.email">
+                                <span v-show="errors.has('email')" class="help text-danger">{{ errors.first('email') }}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" v-model="login.password" required>
+                                <input v-validate="'required'"
+                                       id="password" type="password"
+                                       class="form-control"
+                                       :class="{'is-invalid': errors.has('password') }"
+                                       name="password" v-model="login.password">
+                                <span v-show="errors.has('password')" class="help text-danger">{{ errors.first('password') }}</span>
                             </div>
                         </div>
 
@@ -63,13 +73,21 @@
             }
         },
         methods:{
-            doLogin(){
-                //do actual login
+            async doLogin(){
                 this.isLoading = true;
-                let user = JSON.stringify({"_id":"e30a2348-f8ed-42a6-b3fc-1b7661e540bd","name":"Acadgild admin","email":"admin@acadgild.com","updated_at":"2018-03-26 14:32:21","created_at":"2018-03-26 14:32:21","type":"ADMIN","access_token":"abcdefgh1234567890"});
-                localStorage.setItem("authUser", user);
-                this.isLoading = false;
-                window.location = "/dashboard";
+                try{
+                    let result = await this.$validator.validateAll();
+                    if(result){
+                        let user = JSON.stringify({"_id":"e30a2348-f8ed-42a6-b3fc-1b7661e540bd","name":"Acadgild admin","email":"admin@acadgild.com","updated_at":"2018-03-26 14:32:21","created_at":"2018-03-26 14:32:21","type":"ADMIN","access_token":"abcdefgh1234567890"});
+                        localStorage.setItem("authUser", user);
+                        this.isLoading = false;
+                        window.location = "/dashboard";
+                    }else{
+                        this.isLoading = false;
+                    }
+                }catch (e) {
+                    this.isLoading = false;
+                }
             }
         }
     }
