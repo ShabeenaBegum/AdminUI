@@ -1,6 +1,6 @@
-import Home from '@/pages/Home';
-import About from '@/pages/About';
-import PageNotFound from '@/pages/PageNotFound';
+import Home from './../pages/Home';
+import About from './../pages/About';
+import PageNotFound from './../pages/PageNotFound';
 
 let base = [
     {

@@ -23,7 +23,7 @@
 </template>
 <style>
     .modal-lg {
-        max-width: 35%;
+        max-width: 30%;
     }
     .empty{
         align-items: center;

@@ -1,11 +1,7 @@
 <template>
     <div>
         <div class="card card-default table-card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <data-filter v-model="appliedFilters" :filters="filters"></data-filter>
-                </div>
-            </div>
+
             <div class="card-body">
                 <data-grid :data="students" :columns="cols" @changed="getStudents">
                     <!-- <template slot-scope="{ row, col }">

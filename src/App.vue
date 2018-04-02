@@ -1,21 +1,26 @@
 <template>
         <div class="main">
-            <agnav/>
-            <transition name="fade" mode="out-in">
-                <router-view/>
-            </transition>
+            <navigation-bar/>
+            <div class="content-body">
+                <transition name="fade" mode="out-in">
+                    <router-view/>
+                </transition>
+            </div>
             <flash/>
         </div>
 </template>
 
 <script>
-    import agnav from '@/layout/nav';
+    import navigationBar from './layout/nav';
     export default {
         name: 'App',
-        components: {agnav}
+        components: {navigationBar}
     }
 </script>
 
 <style lang="scss">
     @import './assets/sass/app.scss';
+    .content-body {
+        margin-top: 80px;
+    }
 </style>
