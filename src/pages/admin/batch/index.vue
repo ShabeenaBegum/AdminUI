@@ -16,14 +16,14 @@
                                     placeholder="Select Course"
                                     :options="courses">
                                 <template slot="singleLabel" slot-scope="{ option }">
-                        <span :class="{inactiveCourse: !option.active}">
-                            {{ option.name }}
-                        </span>
+                                    <span :class="{inactiveCourse: !option.active}">
+                                        {{ option.name }}
+                                    </span>
                                 </template>
                                 <template slot="option" slot-scope="props">
-                        <span :class="{inactiveCourse: !props.option.active}">
-                            {{ props.option.name }}
-                        </span>
+                                    <span :class="{inactiveCourse: !props.option.active}">
+                                        {{ props.option.name }}
+                                    </span>
                                 </template>
                             </multiselect>
 

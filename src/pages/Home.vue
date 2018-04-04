@@ -2,17 +2,24 @@
     <div class="container">
         <div class="justify-content-center">
             <center>
-                <img class="img d-block" src="../assets/logo.png" alt=""><br>
-                <h3>Home Page</h3>
+                <geolocation id="map" v-model="address" />
+                {{ address }}
             </center>
         </div>
     </div>
 </template>
 
 <script>
+    import geolocation from './../components/geolocation'
     export default {
+        components:{geolocation},
         mounted() {
             console.log('Component mounted.')
+        },
+        data(){
+            return{
+                address:''
+            }
         }
     }
 </script>

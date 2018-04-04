@@ -58,7 +58,7 @@
                 var tempFilters = [];
                 vm.filters.forEach(function (a) {
                     if (a.value) {
-                        tempFilters.push("filter" + a.key + "[" + a.operator + "]=" + a.value);
+                        tempFilters.push("_f_" + a.key + "[" + a.operator + "]=" + a.value);
                     }
                 });
                 vm.finalFilters = tempFilters.join("&");
@@ -77,7 +77,7 @@
                 } else {
                     var withOutFilters = [];
                     for (var att in vm.$route.query) {
-                        if (!att.includes("filter")) {
+                        if (!att.includes("_f_")) {
                             var st = att + "=" + vm.$route.query[att];
                             withOutFilters.push(st);
                         }
