@@ -47,9 +47,14 @@
 </style>
 <script>
     import datePicker from 'vue-flatpickr-component';
+    import courseApi from '@/services/course';
 
     export default {
         components: {datePicker},
+        created(){
+            let vm = this;
+            courseApi.getAllCourses(courses =>  vm.courses = courses);
+        },
         data() {
             return {
                 date: null,
@@ -129,17 +134,17 @@
             }
 
         },
-        async beforeRouteEnter(to, from, next) {
-            try {
-                let response = await axios.get(window.baseUrl + "/courses");
-                next(function (vm) {
-                    return vm.setData(response.data);
-                })
-            } catch (error) {
-                log(error);
-                flash(error.response.data.data.message, "danger");
-                next();
-            }
-        },
+        // async beforeRouteEnter(to, from, next) {
+        //     try {
+        //         let response = await axios.get(window.baseUrl + "/courses");
+        //         next(function (vm) {
+        //             return vm.setData(response.data);
+        //         })
+        //     } catch (error) {
+        //         log(error);
+        //         flash(error.response.data.data.message, "danger");
+        //         next();
+        //     }
+        // },
     }
 </script>
