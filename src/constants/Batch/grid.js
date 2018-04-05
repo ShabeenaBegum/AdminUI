@@ -1,5 +1,5 @@
 export default {
-    cols:[
+    cols: [
         {
             name: "name",
             key: "name"

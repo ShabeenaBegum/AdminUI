@@ -52,9 +52,9 @@
 
     export default {
         components: {datePicker},
-        created(){
+        created() {
             let vm = this;
-            courseApi.getAllCourses(courses =>  vm.courses = courses);
+            courseApi.getAllCourses(courses => vm.courses = courses);
         },
         data() {
             return {
@@ -64,7 +64,6 @@
                 selectedCourse: null,
                 cols: constants.cols,
                 filters: constants.filters
-
             }
         },
         watch: {
@@ -79,10 +78,6 @@
             }
         },
         methods: {
-            courseStatus(data) {
-                let s = data.active ? '' : ' (in active)';
-                return data.name + s;
-            },
             async getBatchesByCourseId(page = 1) {
                 try {
                     let response = await axios.get(window.baseUrl + "/batches?id=" + this.selectedCourse._id + "&page=" + page);
@@ -91,27 +86,7 @@
                 } catch (error) {
                     log(error);
                 }
-            },
-            setData(courses) {
-                this.courses = courses;
-                let id = this.$route.query.id;
-                if (id) {
-                    this.selectedCourse = _.find(this.courses, ['_id', id]);
-                }
             }
-
-        },
-        // async beforeRouteEnter(to, from, next) {
-        //     try {
-        //         let response = await axios.get(window.baseUrl + "/courses");
-        //         next(function (vm) {
-        //             return vm.setData(response.data);
-        //         })
-        //     } catch (error) {
-        //         log(error);
-        //         flash(error.response.data.data.message, "danger");
-        //         next();
-        //     }
-        // },
+        }
     }
 </script>
