@@ -3,14 +3,16 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th scope="col" v-for="(column, index) in cols" v-text="column" :key="index"></th>
+                <th scope="col" v-for="(column, index) in cols" :key="index">
+                    {{ typeof column === 'object' ? column.name : column }}
+                </th>
             </tr>
             </thead>
             <tbody>
                 <tr v-for="(row, index) in data.data" :key="index">
                     <td v-for="(key, index1) in cols" :key="index1">
-                        <slot :row="row" :col="key">
-                            {{ row[key] }}
+                        <slot :row="row" :col="typeof row === 'object' ? key.key : key">
+                            {{typeof row === 'object' ? row[key.key] : row[key]}}
                         </slot>
                     </td>
                 </tr>

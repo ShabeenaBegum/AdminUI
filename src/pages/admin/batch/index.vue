@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <data-grid :data="batches" @changed="getBatchesByCourseId"/>
+                        <data-grid :data="batches" :columns="cols" @changed="getBatchesByCourseId"/>
                     </div>
                 </div>
             </div>
@@ -48,6 +48,7 @@
 <script>
     import datePicker from 'vue-flatpickr-component';
     import courseApi from '@/services/course';
+    import constants from '@/constants/Batch/grid';
 
     export default {
         components: {datePicker},
@@ -61,43 +62,9 @@
                 batches: {},
                 courses: [],
                 selectedCourse: null,
-                filters: [
-                    {
-                        "display_name": "Batch Name",
-                        "enable": true,
-                        "key": "name",
-                        "operator": "eq",
-                        "value": "",
-                        options: [
-                            {
-                                display_name: "is equal to",
-                                operator: "eq",
-                            },
-                            {
-                                display_name: "contains",
-                                operator: "contains",
-                            }
-                        ]
-                    },
-                    {
-                        "display_name": "Batch Id",
-                        "enable": false,
-                        "operator": "eq",
-                        "key": "_id",
-                        "value": "",
-                        options: [
-                            {
-                                display_name: "is equal to",
-                                operator: "eq",
+                cols: constants.cols,
+                filters: constants.filters
 
-                            },
-                            {
-                                display_name: "contains",
-                                operator: "contains",
-                            }
-                        ]
-                    }
-                ],
             }
         },
         watch: {
