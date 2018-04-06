@@ -19,8 +19,7 @@
                                     track-by="course"
                                     label="course"
                                     placeholder="Select Course"
-                                    :options="courses"
-                                    v-validate="'required'">
+                                    :options="courses">
                                 <template slot="singleLabel" slot-scope="{ option }">
                                     <span :class="{inactiveOption: !option.active}">
                                         {{ option.name }}
@@ -44,8 +43,7 @@
                                         track-by="course_plan_id"
                                         label="course_plan_id"
                                         placeholder="Select Course Plan"
-                                        :options="course_plan_ids"
-                                        v-validate="'required'">
+                                        :options="course_plan_ids">
                                     <template slot="singleLabel" slot-scope="{ option }">
                                         <span :class="{inactiveOption: !option.active}">
                                             {{ option.name }}
@@ -69,7 +67,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="mode_of_training">Mode of Training</label>
-                            <input v-model="newBatch.mode_of_training" class="form-control form-control-sm" disabled />
+                            <input v-model="newBatch.mode_of_training" class="form-control form-control-sm" disabled name="mode_of_training" v-validate="'required'"/>
                         </div>
                     </div>
                 </div>
@@ -80,7 +78,7 @@
                         <div class="form-group">
                             <label for="start_date">Start Date</label>
                             <date-picker v-model="start_date" :config="{minDate: 'today' }"
-                                         class="form-control form-control-sm" v-validate="'required'" >
+                                         class="form-control form-control-sm" >
                             </date-picker>
                         </div>
                     </div>
@@ -113,7 +111,7 @@
                         <label>{{selectedDay.day}}</label>
                         <date-picker v-model="selectedDay.time"
                                      :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
-                                     class="form-control form-control-sm" v-validate="'required'">
+                                     class="form-control form-control-sm">
                         </date-picker>
                     </div>
                 </div>
@@ -129,8 +127,8 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="status">Status</label>
-                            <select v-model="newBatch.status" class="form-control form-control-sm">
-                                <option value="">Select Status</option>
+                            <select v-model="newBatch.status" class="form-control form-control-sm" name="status" v-validate="'required'">
+                                <option selected>Select Status</option>
                                 <option v-for="status in statuses" v-bind:value="status">{{status}}</option>
                             </select>
                         </div>
@@ -146,8 +144,8 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="mentor">Mentor</label>
-                            <select v-model="newBatch.mentor" class="form-control form-control-sm">
-                                <option value="not_assigned">Not Assigned</option>
+                            <select v-model="newBatch.mentor" class="form-control form-control-sm" name="mentor" v-validate="'required'">
+                                <option selected value="not_assigned">Not Assigned</option>
                                 <option v-for="(mentor,index) in mentors" v-bind:value="mentor.id" :key="index">{{mentor.name}}</option>
                             </select>
                         </div>
