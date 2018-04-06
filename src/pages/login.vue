@@ -12,7 +12,6 @@
                                     <input v-validate="'required|email'"
                                            id="email" type="email"
                                            class="form-control" name="email"
-                                           :class="{'is-invalid': errors.has('email') }"
                                            v-model="login.email">
                                     <span v-show="errors.has('email')"
                                           class="help text-danger">
@@ -27,7 +26,6 @@
                                     <input v-validate="'required'"
                                            id="password" type="password"
                                            class="form-control"
-                                           :class="{'is-invalid': errors.has('password') }"
                                            name="password" v-model="login.password">
                                     <span v-show="errors.has('password')"
                                           class="help text-danger">

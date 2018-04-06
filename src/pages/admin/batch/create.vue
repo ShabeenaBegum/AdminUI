@@ -2,7 +2,11 @@
     <div class="container">
         <div class="container justify-content-center">
             <form @submit.prevent="createBatch()">
-                <h4>Basic Details</h4>
+                <div class="card card-default">
+                    <div class="card-header">Basic Details</div>
+                    <div class="card-body">
+
+
                 <div v-if="errors.items.length" class="alert alert-danger">
                     <strong>Oops !!  There are some validation error</strong>
                     <ul>
@@ -40,8 +44,10 @@
                             <div>
                                 <multiselect
                                         class="mr-4"
+                                        :disabled="!selectedCourse"
                                         v-model="selectedCoursePlan"
                                         label="course_plan_id"
+                                        :searchable="true"
                                         placeholder="Select Course Plan"
                                         :options="course_plan_ids"
                                         v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course_plan_id">
@@ -72,15 +78,26 @@
                         </div>
                     </div>
                 </div>
-                <hr />
-                <h4>Batch Schedule</h4>
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-default">
+                    <div class="card-header">
+                        Batch Schedule
+                    </div>
+                    <div class="card-body">
+
+
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label for="start_date">Start Date</label>
-                            <date-picker v-model="start_date" :config="{minDate: 'today' }"
+                            <date-picker v-model="newBatch.start_date" :config="{minDate: 'today' }"
                                          class="form-control form-control-sm"
-                                         v-validate="'required'" name="start_date" data-vv-value-path="innerValue"  :has-error="errors.has('start_date')">
+                                         v-validate="'required'"
+                                         name="start_date"
+                                         data-vv-value-path="innerValue"
+                                         :has-error="errors.has('start_date')">
                             </date-picker>
                         </div>
                     </div>
@@ -91,9 +108,10 @@
                                     class="mr-4"
                                     v-model="newBatch.days"
                                     placeholder="Days"
+                                    :allow-empty="false"
                                     label="day"
                                     track-by="day"
-                                    :disabled="!start_date"
+                                    :disabled="!newBatch.start_date"
                                     :options="days"
                                     :multiple="true"
                                     v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="day" :has-error="errors.has('day')">
@@ -107,20 +125,28 @@
                         </div>
                     </div>
                 </div>
-                <hr />
                 <!--selected days time-->
                 <div class="row">
                     <div v-for="(selectedDay, index) in newBatch.days" class="col-2">
                         <label>{{selectedDay.day}}</label>
                         <date-picker v-model="selectedDay.time"
                                      :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
-                                     class="form-control form-control-sm" v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="selectedDay.day"
-                                     label="selectedDay.day"
+                                     class="form-control form-control-sm"
+                                     v-validate="'required'"
+                                     data-vv-value-path="innerValue"
+                                     :data-vv-name="selectedDay.day"
                                      :has-error="errors.has('selectedDay.day')">
                         </date-picker>
                     </div>
                 </div>
-                <h4>Location Details</h4>
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-default">
+                    <div class="card-header">
+                        Location Details
+                    </div>
+                    <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -168,6 +194,8 @@
                         <div class="col-md-8">
                             <button type="submit" class="btn btn-primary" >Submit</button>
                         </div>
+                    </div>
+                </div>
                     </div>
                 </div>
             </form>
@@ -320,12 +348,12 @@
                     location: null,
                     course_plan_id: null,
                     course_id: null,
-                    start_date: null,
+                    start_date: "",
                     duration: null,
                     mode_of_training: null
                 },
                 selectedDays: null,
-                start_date: null,
+                start_date: "",
                 address: null
 
             }
@@ -349,12 +377,11 @@
                     this.newBatch.mode_of_training = null;
                 }
             },
-            start_date() {
-                this.newBatch.start_date = this.start_date;
+            "newBatch.start_date"(){
                 this.newBatch.days = [];
-                var dt = moment(this.start_date, "YYYY-MM-DD HH:mm:ss");
+                var dt = moment(this.newBatch.start_date, "YYYY-MM-DD HH:mm:ss");
                 var selected_day = (dt.format('dddd'));
-                if(this.start_date)
+                if(this.newBatch.start_date)
                 this.newBatch.days.push({day: selected_day, time: ""});
             },
             address() {
@@ -387,8 +414,6 @@
             createBatch(){
                 let result = this.$validator.validateAll().then(function (result) {
                     alert('hii');
-                    log(moment.tz.names());
-
                 });
             }
         },

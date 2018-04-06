@@ -66,7 +66,7 @@ Vue.component('example-component', Example);
 Vue.component('flash', Flash);
 Vue.component('data-filter', dataFilter);
 Vue.component('data-grid', dataGrid);
-Vue.use(VeeValidate);
+Vue.use(VeeValidate, {classes: true, classNames: { invalid: 'is-invalid'}});
 Vue.mixin({
     data() {
         return {
