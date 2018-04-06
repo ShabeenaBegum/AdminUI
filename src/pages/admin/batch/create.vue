@@ -63,7 +63,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="duration">Duration in min</label>
-                            <input v-model="newBatch.duration" class="form-control form-control-sm" disabled />
+                            <input v-model="newBatch.duration" class="form-control form-control-sm" disabled name="duration" v-validate="'required'" />
                         </div>
                     </div>
                     <div class="col">
@@ -367,7 +367,10 @@
         },
         methods: {
             createBatch(){
-                alert('hii');
+                let result = this.$validator.validateAll().then(function (result) {
+                    alert('hii');
+
+                });
             }
         },
 
