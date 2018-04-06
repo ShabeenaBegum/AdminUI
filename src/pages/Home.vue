@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import geolocation from './../components/geolocation'
+    import geolocation from '@/components/geolocation'
     export default {
         components:{geolocation},
         mounted() {

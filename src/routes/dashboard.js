@@ -1,6 +1,7 @@
 import middleware from '../utils/middleware'
 import Dashboard from "../pages/Dashboard";
 import BatchIndex from "../pages/admin/batch/index";
+import BatchCreate from "../pages/admin/batch/create";
 import MentorIndex from "../pages/admin/mentor/index";
 import StudentIndex from "../pages/admin/student/index";
 
@@ -29,6 +30,12 @@ let routes = [
                 name:'management.student.index',
                 path: 'student',
                 component: StudentIndex,
+            },
+
+            {
+                name:'management.batch.create',
+                path: 'batch/create',
+                component: BatchCreate,
             }
         ]
     }
