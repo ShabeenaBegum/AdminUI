@@ -16,10 +16,11 @@
                             <multiselect
                                     class="mr-4"
                                     v-model="selectedCourse"
-                                    track-by="course"
                                     label="course"
                                     placeholder="Select Course"
-                                    :options="courses">
+                                    :options="courses"
+                                    v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course"
+                                    >
                                 <template slot="singleLabel" slot-scope="{ option }">
                                     <span :class="{inactiveOption: !option.active}">
                                         {{ option.name }}
@@ -40,10 +41,10 @@
                                 <multiselect
                                         class="mr-4"
                                         v-model="selectedCoursePlan"
-                                        track-by="course_plan_id"
                                         label="course_plan_id"
                                         placeholder="Select Course Plan"
-                                        :options="course_plan_ids">
+                                        :options="course_plan_ids"
+                                        v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course_plan_id">
                                     <template slot="singleLabel" slot-scope="{ option }">
                                         <span :class="{inactiveOption: !option.active}">
                                             {{ option.name }}
@@ -78,7 +79,8 @@
                         <div class="form-group">
                             <label for="start_date">Start Date</label>
                             <date-picker v-model="start_date" :config="{minDate: 'today' }"
-                                         class="form-control form-control-sm" >
+                                         class="form-control form-control-sm"
+                                         v-validate="'required'" name="start_date" data-vv-value-path="innerValue"  :has-error="errors.has('start_date')">
                             </date-picker>
                         </div>
                     </div>
@@ -93,7 +95,8 @@
                                     track-by="day"
                                     :disabled="!start_date"
                                     :options="days"
-                                    :multiple="true">
+                                    :multiple="true"
+                                    v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="day" :has-error="errors.has('day')">
                             </multiselect>
                         </div>
                     </div>
@@ -111,7 +114,9 @@
                         <label>{{selectedDay.day}}</label>
                         <date-picker v-model="selectedDay.time"
                                      :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
-                                     class="form-control form-control-sm">
+                                     class="form-control form-control-sm" v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="selectedDay.day"
+                                     label="selectedDay.day"
+                                     :has-error="errors.has('selectedDay.day')">
                         </date-picker>
                     </div>
                 </div>
@@ -128,7 +133,7 @@
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select v-model="newBatch.status" class="form-control form-control-sm" name="status" v-validate="'required'">
-                                <option selected>Select Status</option>
+                                <option selected value="">Select Status</option>
                                 <option v-for="status in statuses" v-bind:value="status">{{status}}</option>
                             </select>
                         </div>
@@ -191,24 +196,24 @@
                         id: 1, name: 'Android Development', active: true,
                         course_plan_id: [
                             {
-                                id: 1121,
+                                id: 1123,
                                 name: 'b2c-selfpaced-2sessions',
                                 active: true,
                                 duration: '60',
                                 mode_of_training: 'online'
                             },
                             {
-                                id: 1121,
+                                id: 1124,
                                 name: 'b2c-selfpaced-3sessions',
                                 active: false,
-                                duration: '60',
+                                duration: '50',
                                 mode_of_training: 'offline'
                             },
                             {
-                                id: 1121,
+                                id: 1125,
                                 name: 'b2c-selfpaced-4sessions',
                                 active: true,
-                                duration: '60',
+                                duration: '70',
                                 mode_of_training: 'online'
                             }
                         ]
@@ -243,21 +248,21 @@
                         id: 3, name: 'Big data Development', active: true,
                         course_plan_id: [
                             {
-                                id: 1121,
+                                id: 1130,
                                 name: 'b2c-selfpaced-2sessions',
                                 active: true,
                                 duration: '60',
                                 mode_of_training: 'online'
                             },
                             {
-                                id: 1121,
+                                id: 1131,
                                 name: 'b2c-selfpaced-3sessions',
                                 active: true,
                                 duration: '60',
                                 mode_of_training: 'online'
                             },
                             {
-                                id: 1121,
+                                id: 1132,
                                 name: 'b2c-selfpaced-4sessions',
                                 active: true,
                                 duration: '60',
@@ -328,12 +333,25 @@
         watch: {
             selectedCourse() {
                 this.newBatch.course_id = this.selectedCourse ? this.selectedCourse.id : null;
+                if(this.selectedCourse == null){
+                    this.newBatch.course_plan_id = null;
+                    this.newBatch.duration = null;
+                    this.newBatch.mode_of_training = null;
+                }
             },
             selectedCoursePlan() {
                 this.newBatch.course_plan_id = this.selectedCoursePlan ? this.selectedCoursePlan.id : null;
+                if(this.selectedCoursePlan){
+                    this.newBatch.duration = this.selectedCoursePlan.duration ? this.selectedCoursePlan.duration : null;
+                    this.newBatch.mode_of_training = this.selectedCoursePlan.mode_of_training ? this.selectedCoursePlan.mode_of_training : null;
+                } else {
+                    this.newBatch.duration = null;
+                    this.newBatch.mode_of_training = null;
+                }
             },
             start_date() {
                 this.newBatch.start_date = this.start_date;
+                this.newBatch.days = [];
                 var dt = moment(this.start_date, "YYYY-MM-DD HH:mm:ss");
                 var selected_day = (dt.format('dddd'));
                 if(this.start_date)
@@ -341,7 +359,14 @@
             },
             address() {
                 this.newBatch.location = this.address ? this.address : null;
-            }
+            },
+           /* duration() {
+                this.newBatch.duration = this.selectedCoursePlan.duration ? this.selectedCoursePlan.duration : null;
+            },
+            mode_of_training() {
+
+            },*/
+
         },
         computed: {
             course_plan_ids() {
@@ -355,18 +380,14 @@
                     return [];
                 }
             },
-            duration() {
-                this.newBatch.duration = this.selectedCoursePlan.duration ? this.selectedCoursePlan.duration : null;
-            },
-            mode_of_training() {
-                this.newBatch.mode_of_training = this.selectedCoursePlan.mode_of_training ? this.selectedCoursePlan.mode_of_training : null;
-            },
+
 
         },
         methods: {
             createBatch(){
                 let result = this.$validator.validateAll().then(function (result) {
                     alert('hii');
+                    log(moment.tz.names());
 
                 });
             }
