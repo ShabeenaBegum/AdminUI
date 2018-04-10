@@ -31,7 +31,31 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <data-grid :data="batches" :columns="cols" @changed="getBatchesByCourseId"/>
+                        <data-grid :data="batches" :columns="cols" @changed="getBatchesByCourseId">
+                            <template slot-scope="{ row, col }">
+                                <span v-if="col === 'batch_name'">
+                                    <router-link :to="getBatchLink(row)">
+                                        {{ row['batch_name']}}
+                                    </router-link>
+                                </span>
+                                <span v-else-if="col === 'end_date'">
+                                    {{ getBatchLastDate(row) }}
+                                </span>
+                                <span v-else-if="col === 'day_time'">
+                                    <span class="badge badge-secondary mr-1" v-for="day in row['days']">
+                                        {{ day.day }} - {{ day.time}}
+                                    </span>
+                                </span>
+                                <!-- Rating -->
+                                <span v-else-if="col === 'rating'">
+                                    3
+                                </span>
+                                <span v-else-if="col === 'session'">
+                                    <router-link :to="getSessionLink(row)">3/2</router-link>
+                                </span>
+                                <span v-else>{{ row[col] }}</span>
+                            </template>
+                        </data-grid>
                     </div>
                 </div>
             </div>
@@ -43,6 +67,9 @@
         text-decoration: line-through;
         color: red;
     }
+    /*.table-card .card-body .table th, .table-card .card-body .table td {*/
+        /*text-align: center;*/
+    /*}*/
 
 </style>
 <script>
@@ -54,7 +81,7 @@
         components: {datePicker},
         created() {
             let vm = this;
-            courseApi.getAllCourses(courses => vm.courses = courses);
+            courseApi.getAllCourses(courses => vm.courses = courses.data);
         },
         data() {
             return {
@@ -78,11 +105,21 @@
             }
         },
         methods: {
+            getBatchLink(batch){
+                return "batch/"+batch._id ;
+            },
+            getSessionLink(batch){
+              return "sessions/"+batch._id ;
+            },
+            getBatchLastDate(batch){
+              let lastSession = _.last(batch.sessions);
+              return lastSession ? lastSession.date : 'N/A';
+            },
             async getBatchesByCourseId(page = 1) {
                 try {
-                    let response = await axios.get(window.baseUrl + "/batches?id=" + this.selectedCourse._id + "&page=" + page);
-                    this.batches = response.data;
-                    history.pushState(null, null, '?id=' + this.selectedCourse._id + '&page=' + page);
+                    let response = await axios.get(window.batchUrl + "/batch?course_id=" + this.selectedCourse._id + "&page=" + page);
+                    this.batches = response.data.data;
+                    history.pushState(null, null, '?course_id=' + this.selectedCourse._id + '&page=' + page);
                 } catch (error) {
                     log(error);
                 }

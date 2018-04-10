@@ -2,7 +2,7 @@ export default {
     cols: [
         {
             name: "name",
-            key: "name"
+            key: "batch_name"
         },
         {
             name: "start Date",
