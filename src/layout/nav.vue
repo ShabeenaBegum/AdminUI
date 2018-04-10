@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar navbar-expand-md navbar-light appbar fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark appbar fixed-top">
             <div class="container-fluid">
                 <router-link class="navbar-brand" to="/">AcadGild</router-link>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -40,7 +40,8 @@
     }
     a#mainNavDropDown {
         font-weight: bolder;
-        color: #000;
+        color: whitesmoke;
+        margin-top: 4px;
     }
 </style>
 <script>
@@ -67,7 +68,7 @@
                     console.log("changeMenuName");
                     let n = $(".sidebar-active").text();
                     if(n){
-                        $('#mainNavDropDown').text(n);
+                        $('#mainNavDropDown #currentMenuText').text(n);
                     }
                 });
             },
