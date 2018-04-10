@@ -8,7 +8,7 @@ import Multiselect from 'vue-multiselect'
 import authService from './services/auth';
 import nativeToast from 'native-toast'
 import Example from './components/Example';
-import Flash from './components/Flash';
+import Flash from './components/flash';
 import dataFilter from './components/dataFilterr';
 import dataGrid from './components/dataGrid';
 import VeeValidate from 'vee-validate';
