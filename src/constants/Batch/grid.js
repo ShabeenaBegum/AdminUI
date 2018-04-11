@@ -33,6 +33,10 @@ export default {
             key: "mode_of_training"
         },
         {
+            name: "Students",
+            key: "no_of_students"
+        },
+        {
             name: "Sessions",
             key: "session"
         },
