@@ -9,12 +9,12 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <multiselect
-                                    class="mr-4"
-                                    v-model="selectedCourse"
-                                    track-by="name"
-                                    label="name"
-                                    placeholder="Select Course"
-                                    :options="courses">
+                                class="mr-4"
+                                v-model="selectedCourse"
+                                track-by="name"
+                                label="name"
+                                placeholder="Select Course"
+                                :options="courses">
                                 <template slot="singleLabel" slot-scope="{ option }">
                                     <span :class="{inactiveCourse: !option.active}">
                                         {{ option.name }}
@@ -31,18 +31,16 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <data-grid :data="batches" :columns="cols" @changed="getBatchesByCourseId">
+                        <data-grid :data="batches" :columns="cols" @changed="paginationPageChanged">
                             <template slot-scope="{ row, col }">
-                                <span v-if="col === 'batch_name'">
-                                    <router-link :to="getBatchLink(row)">
-                                        {{ row['batch_name']}}
-                                    </router-link>
+                                <span class="text-primary" v-if="col === 'batch_name'" @click="showBatchModal(row)">
+                                        {{ row.batch_name }}
                                 </span>
                                 <span v-else-if="col === 'end_date'">
                                     {{ getBatchLastDate(row) }}
                                 </span>
                                 <span v-else-if="col === 'day_time'">
-                                    <span class="badge badge-secondary mr-1" v-for="day in row['days']">
+                                    <span class="badge badge-secondary mr-1" v-for="day in row.days">
                                         {{ day.day }} - {{ day.time}}
                                     </span>
                                 </span>
@@ -50,6 +48,10 @@
                                 <span v-else-if="col === 'rating'">
                                     3
                                 </span>
+                                <span v-else-if="col === 'no_of_students'">
+                                    61
+                                </span>
+
                                 <span v-else-if="col === 'session'">
                                     <router-link :to="getSessionLink(row)">3/2</router-link>
                                 </span>
@@ -60,6 +62,10 @@
                 </div>
             </div>
         </div>
+        <batch-modal
+            v-if="currentBatch"
+            @closed="currentBatch = null"
+            :batch="currentBatch"/>
     </div>
 </template>
 <style>
@@ -67,8 +73,9 @@
         text-decoration: line-through;
         color: red;
     }
+
     /*.table-card .card-body .table th, .table-card .card-body .table td {*/
-        /*text-align: center;*/
+    /*text-align: center;*/
     /*}*/
 
 </style>
@@ -76,12 +83,22 @@
     import datePicker from 'vue-flatpickr-component';
     import courseApi from '@/services/course';
     import constants from '@/constants/Batch/grid';
+    import batchModal from '@/pages/admin/batch/view';
 
     export default {
-        components: {datePicker},
+        components: {datePicker, batchModal},
         created() {
             let vm = this;
-            courseApi.getAllCourses(courses => vm.courses = courses.data);
+            courseApi.getAllCourses(courses => {
+                vm.courses = courses.data;
+                let query = vm.$route.query;
+                if (query.course_id) {
+                    let selectCourse = _.find(vm.courses, { "_id" : query.course_id});
+                    if (selectCourse) {
+                        vm.selectedCourse = selectCourse;
+                    }
+                }
+            });
         },
         data() {
             return {
@@ -90,7 +107,8 @@
                 courses: [],
                 selectedCourse: null,
                 cols: constants.cols,
-                filters: constants.filters
+                filters: constants.filters,
+                currentBatch: null
             }
         },
         watch: {
@@ -105,15 +123,20 @@
             }
         },
         methods: {
-            getBatchLink(batch){
-                return "batch/"+batch._id ;
+            showBatchModal(batch) {
+                this.currentBatch = batch;
             },
-            getSessionLink(batch){
-              return "sessions/"+batch._id ;
+            getSessionLink(batch) {
+                return "sessions/" + batch._id;
             },
-            getBatchLastDate(batch){
-              let lastSession = _.last(batch.sessions);
-              return lastSession ? lastSession.date : 'N/A';
+            getBatchLastDate(batch) {
+                let lastSession = _.last(batch.sessions);
+                return lastSession ? lastSession.date : 'N/A';
+            },
+            paginationPageChanged(page) {
+                if (this.batches.data && page != this.batches.current_page) {
+                    this.getBatchesByCourseId(page);
+                }
             },
             async getBatchesByCourseId(page = 1) {
                 try {
