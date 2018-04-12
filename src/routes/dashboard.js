@@ -4,6 +4,8 @@ import BatchIndex from "../pages/admin/batch/index";
 import BatchCreate from "../pages/admin/batch/create";
 import MentorIndex from "../pages/admin/mentor/index";
 import StudentIndex from "../pages/admin/student/index";
+import CourseCreate from "../pages/admin/course/create";
+
 
 let routes = [
     {
@@ -36,7 +38,12 @@ let routes = [
                 name:'management.batch.create',
                 path: 'batch/create',
                 component: BatchCreate,
-            }
+            },
+            {
+                name:'management.course.create',
+                path: 'course',
+                component: CourseCreate,
+            }          
         ]
     }
 ];
