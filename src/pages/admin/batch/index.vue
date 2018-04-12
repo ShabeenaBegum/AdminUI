@@ -27,7 +27,7 @@
                                 </template>
                             </multiselect>
 
-                            <button class="btn btn-primary">Create Batch</button>
+                            <button class="btn btn-primary" @click="$router.push({ name: 'management.batch.create'})">Create Batch</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -134,7 +134,7 @@
                 this.currentBatch = batch;
             },
             getSessionLink(batch) {
-                return "sessions/" + batch._id;
+                return "sessions?batch_id=" + batch._id;
             },
             getBatchLastDate(batch) {
                 let lastSession = _.last(batch.sessions);

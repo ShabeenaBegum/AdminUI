@@ -14,7 +14,7 @@
                     </ul>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="course">Course</label>
                             <multiselect
@@ -38,7 +38,7 @@
                             </multiselect>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="course_plan_id">Course Plan</label>
                             <div>
@@ -65,13 +65,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="duration">Duration in min</label>
                             <input v-model="newBatch.duration" class="form-control form-control-sm" disabled name="duration" v-validate="'required'" />
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="co-md-2">
                         <div class="form-group">
                             <label for="mode_of_training">Mode of Training</label>
                             <input v-model="newBatch.mode_of_training" class="form-control form-control-sm" disabled name="mode_of_training" v-validate="'required'"/>
@@ -191,7 +191,7 @@
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-8">
-                            <button type="submit" class="btn btn-primary" @click="createBatch()">Submit</button>
+                            <button type="submit" class="btn btn-primary" @click="createBatch()">Create Batch</button>
                         </div>
                     </div>
                 </div>
@@ -317,27 +317,24 @@
                     if(result){
                         try{
                             let coursePlan = await axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.newBatch.course_plan_id);
-                            console.log(coursePlan)
-                            console.log(coursePlan.data.modules != undefined);
-                            console.log(coursePlan.data.sessions != undefined);
-                                if((coursePlan.status == 200)&&(coursePlan.data.modules != undefined)&&(coursePlan.data.sessions != undefined) )
+                                if((coursePlan.status == 200)&&(coursePlan.data.data.modules != undefined)&&(coursePlan.data.data.sessions != undefined) )
                                 {
                                     vm.newBatch.modules = coursePlan.data.data.modules;
                                     vm.newBatch.sessions = coursePlan.data.data.sessions;
                                     try{
                                         let response = await axios.post(window.batchUrl+"/batch", vm.newBatch);
-                                        console.log(response);
                                         if(response.status == 201)
                                         {
-                                            flash('Batch created');
+                                            sflash('Batch created');
+                                            this.$router.push({ name: 'management.batch.index', query: { course_id: this.selectedCourse._id, page:1 }});
                                         } else {
-                                            flash('Batch Not created', 'danger');
+                                            sflash('Batch Not created', 'error');
                                         }
                                     }catch(er){
                                         log(er);
                                     }
                                 } else {
-                                    flash('Content Not updated contact support team!', 'danger');
+                                    sflash('Content Not updated contact support team!', 'error');
                                 }
 
                         }catch(e){

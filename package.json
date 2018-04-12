@@ -19,6 +19,7 @@
     "moment": "^2.21.0",
     "native-toast": "^1.2.1",
     "nprogress": "^0.2.0",
+    "sweetalert": "^2.1.0",
     "vee-validate": "^2.0.6",
     "vue": "^2.5.2",
     "vue-flatpickr-component": "^7.0.0",

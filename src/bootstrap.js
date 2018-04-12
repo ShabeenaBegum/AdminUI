@@ -9,8 +9,9 @@ import bootstrap from "bootstrap";
 import axios from "axios";
 import moment from "moment";
 import VueTippy from 'vue-tippy';
+import sweetalert from "sweetalert";
 
-
+window.swal = sweetalert;
 window._ = lodash;
 try {
   window.$ = window.jQuery = jquery;
@@ -58,6 +59,10 @@ window.eventHub = new Vue();
 
 window.flash = function (message, type = 'success') {
     window.eventHub.$emit('flash', {'message': message, 'type': type})
+};
+
+window.sflash = function (message, type = 'success') {
+    swal({ icon: type, title: message, text: " ", button: false, timer: 1500});
 };
 
 if (authService.check()) {
