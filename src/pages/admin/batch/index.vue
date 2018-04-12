@@ -33,7 +33,13 @@
                     <div class="card-body">
                         <data-grid :data="batches" :columns="cols" @changed="paginationPageChanged">
                             <template slot-scope="{ row, col }">
-                                <span class="text-primary" v-if="col === 'batch_name'" @click="showBatchModal(row)">
+                                <span
+                                        title="View Batch"
+                                        v-tippy
+                                        style="cursor: pointer"
+                                        class="text-primary"
+                                        v-if="col === 'batch_name'"
+                                        @click="showBatchModal(row)">
                                         {{ row.batch_name }}
                                 </span>
                                 <span v-else-if="col === 'end_date'">
@@ -52,7 +58,8 @@
                                     61
                                 </span>
 
-                                <span v-else-if="col === 'session'">
+                                <span v-else-if="col === 'session'" title="View Sessions"
+                                      v-tippy>
                                     <router-link :to="getSessionLink(row)">3/2</router-link>
                                 </span>
                                 <span v-else>{{ row[col] }}</span>

@@ -3,19 +3,15 @@ import Vue from "vue";
 import NProgress from "nprogress";
 import authService from "@/services/auth";
 import router from "@/routes";
-
 import lodash from "lodash";
-
 import jquery from "jquery";
-
 import bootstrap from "bootstrap";
-
 import axios from "axios";
-
 import moment from "moment";
+import VueTippy from 'vue-tippy';
+
 
 window._ = lodash;
-
 try {
   window.$ = window.jQuery = jquery;
 } catch (e) {}
@@ -76,3 +72,5 @@ router.beforeEach(function (to, from, next) {
 router.afterEach(function () {
     NProgress.done();
 });
+
+Vue.use(VueTippy);

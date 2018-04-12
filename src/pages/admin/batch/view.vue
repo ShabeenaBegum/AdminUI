@@ -3,10 +3,13 @@
          tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Batch <code>{{ batch.batch_name }}</code> details
-                    </h5>
+                <div class="modal-header ">
+                    <div class="d-flex" style="width: 100%;justify-content: space-between">
+                        <h5 class="modal-title " id="exampleModalLabel">
+                            Batch <code>{{ batch.batch_name }}</code> details
+                        </h5>
+                        <button class="btn btn-primary btn-sm">Edit Batch</button>
+                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -29,8 +32,8 @@
                             </span>
                         </div>
                         <div class="col-md-4">
-                            <h5>location/timezone</h5>
-                            {{ batch.location.formatted_address }} / {{ batch.time_zone}}
+                            <h5>location - timezone</h5>
+                            {{ batch.location.formatted_address }} - {{ batch.time_zone}}
                         </div>
                     </div>
                     <hr>
@@ -91,7 +94,7 @@
                             <td>{{ session.topics.join(", ")}}</td>
                             <td>{{ getModuleName(session.module_id) }}</td>
                             <th>{{ session.status}}</th>
-                            <td>{{ formatDate(session.date, "MMM DD YYYY")}} / {{ session.time}}</td>
+                            <td>{{ formatDate(session.date, "DD MMM YY")}} @ {{ session.time}} IST</td>
                             <td>{{ session.mentor}}</td>
                         </tr>
                         </tbody>
