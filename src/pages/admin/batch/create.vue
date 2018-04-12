@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="container justify-content-center">
-            <form @submit.prevent="createBatch()">
+            <!-- <form> -->
                 <div class="card card-default">
                     <div class="card-header">Basic Details</div>
                     <div class="card-body">
@@ -52,12 +52,12 @@
                                         :options="course_plan_ids"
                                         v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course_plan_id">
                                     <template slot="singleLabel" slot-scope="{ option }">
-                                        <span :class="{inactiveOption: !option.active}">
+                                        <span :class="{inactiveOption: !option.status}">
                                             {{ option.name }}
                                         </span>
                                     </template>
                                     <template slot="option" slot-scope="props">
-                                        <span :class="{inactiveOption: !props.option.active}">
+                                        <span :class="{inactiveOption: !props.option.status}">
                                             {{ props.option.name }}
                                         </span>
                                     </template>
@@ -82,9 +82,9 @@
                 </div>
                 <hr>
                 <div class="card card-default">
-                    <div class="card-header">
-                        Batch Schedule
-                    </div>
+                <div class="card-header">
+                    Batch Schedule
+                </div>
                     <div class="card-body">
 
 
@@ -92,7 +92,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="start_date">Start Date</label>
-                            <date-picker v-model="newBatch.start_date" :config="{minDate: 'today' }"
+                            <date-picker v-model="newBatch.start_date" :config="{minDate: 'today'}"
                                          class="form-control form-control-sm"
                                          v-validate="'required'"
                                          name="start_date"
@@ -133,7 +133,6 @@
                                      :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
                                      class="form-control form-control-sm"
                                      v-validate="'required'"
-                                     data-vv-value-path="innerValue"
                                      :data-vv-name="selectedDay.day"
                                      :has-error="errors.has('selectedDay.day')">
                         </date-picker>
@@ -192,13 +191,13 @@
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-8">
-                            <button type="submit" class="btn btn-primary" >Submit</button>
+                            <button type="submit" class="btn btn-primary" @click="createBatch()">Submit</button>
                         </div>
                     </div>
                 </div>
                     </div>
                 </div>
-            </form>
+            <!-- </form> -->
         </div>
     </div>
 </template>
@@ -212,120 +211,17 @@
     import datePicker from 'vue-flatpickr-component';
     import moment from 'moment';
     import geolocation from '@/components/geolocation';
+    import courseApi from '@/services/course';
     export default {
         components: {datePicker, geolocation},
-        mounted() {
+        created() {
+            courseApi.getAllCourses(courses => this.courses=courses.data);
         },
         data() {
             return {
                 users: [],
-                courses: [
-                    {
-                        id: 1, name: 'Android Development', active: true,
-                        course_plan_id: [
-                            {
-                                id: 1123,
-                                name: 'b2c-selfpaced-2sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1124,
-                                name: 'b2c-selfpaced-3sessions',
-                                active: false,
-                                duration: '50',
-                                mode_of_training: 'offline'
-                            },
-                            {
-                                id: 1125,
-                                name: 'b2c-selfpaced-4sessions',
-                                active: true,
-                                duration: '70',
-                                mode_of_training: 'online'
-                            }
-                        ]
-                    },
-                    {
-                        id: 2, name: 'Frontend Development', active: true,
-                        course_plan_id: [
-                            {
-                                id: 1125,
-                                name: 'b2c-selfpaced-2sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1126,
-                                name: 'front-b2c-selfpaced-3sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1127,
-                                name: 'b2c-selfpaced-4sessions',
-                                active: false,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            }
-                        ]
-                    },
-                    {
-                        id: 3, name: 'Big data Development', active: true,
-                        course_plan_id: [
-                            {
-                                id: 1130,
-                                name: 'b2c-selfpaced-2sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1131,
-                                name: 'b2c-selfpaced-3sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1132,
-                                name: 'b2c-selfpaced-4sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            }
-                        ]
-                    },
-                    {
-                        id: 4, name: 'FullStack Development', active: false,
-                        course_plan_id: [
-                            {
-                                id: 1121,
-                                name: 'b2c-selfpaced-2sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1121,
-                                name: 'b2c-selfpaced-3sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            },
-                            {
-                                id: 1121,
-                                name: 'b2c-selfpaced-4sessions',
-                                active: true,
-                                duration: '60',
-                                mode_of_training: 'online'
-                            }
-                        ]
-                    },
-                ],
-                statuses: ['yet_to_start', 'in_progress', 'completed'],
+                courses: [],
+                statuses: ['yet_to_start', 'pending', 'completed'],
                 mentors: [
                     {id: 1, name: 'mentor1'},
                     {id: 2, name: 'mentor2'},
@@ -350,7 +246,9 @@
                     course_id: null,
                     start_date: "",
                     duration: null,
-                    mode_of_training: null
+                    mode_of_training: null,
+                    sessions: [],
+                    modules: []
                 },
                 selectedDays: null,
                 start_date: "",
@@ -360,7 +258,7 @@
         },
         watch: {
             selectedCourse() {
-                this.newBatch.course_id = this.selectedCourse ? this.selectedCourse.id : null;
+                this.newBatch.course_id = this.selectedCourse ? this.selectedCourse._id : null;
                 if(this.selectedCourse == null){
                     this.newBatch.course_plan_id = null;
                     this.newBatch.duration = null;
@@ -368,9 +266,9 @@
                 }
             },
             selectedCoursePlan() {
-                this.newBatch.course_plan_id = this.selectedCoursePlan ? this.selectedCoursePlan.id : null;
+                this.newBatch.course_plan_id = this.selectedCoursePlan ? this.selectedCoursePlan._id : null;
                 if(this.selectedCoursePlan){
-                    this.newBatch.duration = this.selectedCoursePlan.duration ? this.selectedCoursePlan.duration : null;
+                    this.newBatch.duration = this.selectedCoursePlan.weeks ? this.selectedCoursePlan.weeks : null;
                     this.newBatch.mode_of_training = this.selectedCoursePlan.mode_of_training ? this.selectedCoursePlan.mode_of_training : null;
                 } else {
                     this.newBatch.duration = null;
@@ -399,8 +297,8 @@
             course_plan_ids() {
                 let vm = this;
                 if (this.selectedCourse) {
-                    if (this.selectedCourse.course_plan_id) {
-                        return this.selectedCourse.course_plan_id;
+                    if (this.selectedCourse.coursePlan) {
+                        return this.selectedCourse.coursePlan;
                     }
                     return [];
                 } else {
@@ -411,10 +309,46 @@
 
         },
         methods: {
-            createBatch(){
-                let result = this.$validator.validateAll().then(function (result) {
-                    alert('hii');
-                });
+            async createBatch(){
+                let vm = this;
+
+                try{
+                    let result = await this.$validator.validateAll();
+                    if(result){
+                        try{
+                            let coursePlan = await axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.newBatch.course_plan_id);
+                            console.log(coursePlan)
+                            console.log(coursePlan.data.modules != undefined);
+                            console.log(coursePlan.data.sessions != undefined);
+                                if((coursePlan.status == 200)&&(coursePlan.data.modules != undefined)&&(coursePlan.data.sessions != undefined) )
+                                {
+                                    vm.newBatch.modules = coursePlan.data.data.modules;
+                                    vm.newBatch.sessions = coursePlan.data.data.sessions;
+                                    try{
+                                        let response = await axios.post(window.batchUrl+"/batch", vm.newBatch);
+                                        console.log(response);
+                                        if(response.status == 201)
+                                        {
+                                            flash('Batch created');
+                                        } else {
+                                            flash('Batch Not created', 'danger');
+                                        }
+                                    }catch(er){
+                                        log(er);
+                                    }
+                                } else {
+                                    flash('Content Not updated contact support team!', 'danger');
+                                }
+
+                        }catch(e){
+                            log(e);
+                        }
+                    }
+
+                }catch(error){
+                    log(error);
+                }
+           
             }
         },
 
