@@ -5,6 +5,7 @@ import BatchCreate from "../pages/admin/batch/create";
 import BatchEdit from "../pages/admin/batch/edit";
 import MentorIndex from "../pages/admin/mentor/index";
 import StudentIndex from "../pages/admin/student/index";
+import SessionIndex from "../pages/admin/session/index";
 
 let routes = [
     {
@@ -21,6 +22,11 @@ let routes = [
                 name:'management.batch.index',
                 path: 'batch',
                 component: BatchIndex,
+            },
+            {
+                name:'management.session.index',
+                path: 'sessions',
+                component: SessionIndex,
             },
             {
                 name:'management.mentor.index',
