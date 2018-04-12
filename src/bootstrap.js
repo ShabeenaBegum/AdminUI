@@ -11,6 +11,7 @@ import moment from "moment";
 import VueTippy from 'vue-tippy';
 import sweetalert from "sweetalert";
 
+
 window.swal = sweetalert;
 window._ = lodash;
 try {
