@@ -99,7 +99,7 @@
 		                    </div>
 		                </div>
 	                    <div class="row">
-		                    <div v-for="(selectedDay, index) in batchData.days" class="col-2">
+		                    <div v-for="(selectedDay, index) in batchData.days" class="col-2 batch-days">
 		                        <label>{{selectedDay.day}}</label>
 		                        
 		                        <date-picker v-validate="'required'" 
@@ -164,22 +164,25 @@
 	import datePicker from 'vue-flatpickr-component';
 	import geolocation from '@/components/geolocation';
 	import moment from 'moment';
+	import { ErrorBag } from 'vee-validate';
+
+	
+
 	export default {
-		components: { datePicker, geolocation },
+		components: { datePicker, geolocation, ErrorBag },
 		props: ['batch_id'],
 		async created() {
 			let vm = this;
-			await axios.get(window.batchUrl+"/batch/"+vm.batch_id)
+			await axios.get("http://batch.local/api/batch/"+vm.batch_id)
 				.then(function(response){
 					vm.batchData = response.data.data;
-					log(response.data.data);
+					vm.course_plan_id = vm.batchData.course_plan_id;
+					vm.start_date = vm.batchData.start_date;
 				}).catch(function(error){
 					log(error);
 				});
 			await axios.get(window.contentUrl+"/course-plan?course_id="+vm.batchData.course_id)
 				.then(function(response){
-					log('plan');
-					log(response);
 					vm.coursePlans = response.data.data;
 					vm.selectedCoursePlan = _.find(vm.coursePlans,function(cp){
 						return vm.batchData.course_plan_id == cp._id;
@@ -187,8 +190,7 @@
 				}).catch(function(error){
 					log(error)
 				})
-			vm.course_plan_id = vm.batchData.course_plan_id;
-			vm.start_date = vm.batchData.start_date;
+			
 		},
 		data() {
             return {
@@ -212,7 +214,6 @@
                     {id: 2, name: 'mentor2'},
                     {id: 3, name: 'mentor3'},
                 ],
-                address: null,
                 start_date: null,
                 course_plan_id: null
            }
@@ -231,15 +232,17 @@
                 }
             },
             "batchData.start_date"(){
-                this.batchData.days = [];
-                var dt = moment(this.batchData.start_date, "YYYY-MM-DD HH:mm:ss");
-                var selected_day = (dt.format('dddd'));
-                if(this.batchData.start_date)
-                this.batchData.days.push({day: selected_day, time: ""});
-            },
-            /*"batchData.location"() {
-                this.batchData.location = this.batchData.location ? this.batchData.location : null;
-            }*/
+            	const bag = new ErrorBag();
+            	if( this.batchData.start_date != this.start_date){
+            		$('#batch-days').empty();
+	                this.batchData.days = [];
+            		bag.clear(); 
+	                var dt = moment(this.batchData.start_date, "YYYY-MM-DD HH:mm:ss");
+	                var selected_day = (dt.format('dddd'));
+	                if(this.batchData.start_date)
+	                this.batchData.days.push({day: selected_day, time: ""});
+            	}
+            }
 
         },
         computed: {
@@ -255,41 +258,56 @@
 
         },
         methods: {
-            editBatch(){
+            async editBatch(){
             	let vm = this;
-                let result = this.$validator.validateAll().then(function (result) {
-                    alert('hii');
-                });
-                // if(vm.batchData.start_date >)
-                vm.batchDataCopy = {...vm.batchData};
+            	let result = await this.$validator.validateAll();
+                if(result){
+                    try{
+                    	var batch_date = new Date(vm.batchData.start_date); //dd-mm-YYYY
+						var today = new Date();
+						if(batch_date > today){
+		                
+			                vm.batchDataCopy = {...vm.batchData};
+			                if(vm.batchData.course_plan_id == vm.course_plan_id){
+			                	delete vm.batchDataCopy.course_plan_id;
+			                } else {
+			                	delete vm.batchDataCopy.modules;
+			                	delete vm.batchDataCopy.sessions;
+			                	try{
+				                	let coursePlan = await axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.batchData.course_plan_id);
+				                    if((coursePlan.status == 200)&&(coursePlan.data.data.modules != undefined)&&(coursePlan.data.data.sessions != undefined) )
+				                    {
+				                        vm.batchDataCopy.modules = coursePlan.data.data.modules;
+				                        vm.batchDataCopy.sessions = coursePlan.data.data.sessions;
+				                    } 
+			                		
+			                	} catch(error){
+			                		log(error);
+			                        sflash('Content Not updated contact support team!', 'error');
+			                    }
+			                }
+			                if(vm.batchData.start_date == vm.start_date){
+			                	delete vm.batchDataCopy.start_date;
+			                }
+			                try{
+			                	let upadatedBatch = await axios.put('http://batch.local/api/batch/'+vm.batchDataCopy._id, vm.batchDataCopy);
+			                	sflash('Batch updated');
+			                } catch(error){
+			                	sflash('Batch not updated!', 'error');
+			                	log(error);
+			                }
 
-                if(vm.batchData.course_plan_id == vm.course_plan_id){
-                	delete vm.batchDataCopy.course_plan_id;
-                } else {
-                	vm.batchDataCopy.course_plan_id = vm.batchData.course_plan_id;
-                	delete vm.batchDataCopy.modules;
-                	delete vm.batchDataCopy.sessions;
-                	let coursePlan = axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.batchData.course_plan_id);
-                    if((coursePlan.status == 200)&&(coursePlan.data.data.modules != undefined)&&(coursePlan.data.data.sessions != undefined) )
-                    {
-                        vm.batchDataCopy.modules = coursePlan.data.data.modules;
-                        vm.batchDataCopy.sessions = coursePlan.data.data.sessions;
-                    } else {
-                        flash('Content Not updated contact support team!', 'danger');
+		            	} else {
+		            		sflash('Start data must be equal to or greater than today!','error');
+		            	}	
                     }
-                }
-                	
-
-                if(vm.batchData.start_date == vm.start_date){
-                	log('inside');
-                	delete vm.batchDataCopy.start_date;
-                } else {
-                	vm.batchDataCopy.start_date = vm.batchData.start_date;
-                }
-                	log(vm.batchDataCopy);
-
-                axios.put(window.batchUrl+'/batch/'+vm.batchDataCopy._id, vm.batchDataCopy).then(response => console.log(response));
-            }
-        }
+                    catch(error){
+                    	log(error);
+                    }
+                
+                
+            	}
+        	}
+		}
 	}
 </script>
