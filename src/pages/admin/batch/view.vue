@@ -1,5 +1,5 @@
 <template>
-    <div class="modal docked docked-right in modal-slide" id="notification-modal"
+    <div class="modal docked docked-right in modal-slide" id="batch-view-modal"
          tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -8,7 +8,7 @@
                         <h5 class="modal-title " id="exampleModalLabel">
                             Batch <code>{{ batch.batch_name }}</code> details
                         </h5>
-                        <button class="btn btn-primary btn-sm">Edit Batch</button>
+                        <button class="btn btn-primary btn-sm" @click="editBatch()">Edit Batch</button>
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -43,8 +43,8 @@
                             {{ batch.course_plan_id }}
                         </div>
                         <div class="col-md-4">
-                            <h5>Course Id</h5>
-                            {{ batch.course_id }}
+                            <h5>Course</h5>
+                            {{ course.name }}
                         </div>
                         <div class="col-md-4">
 
@@ -132,13 +132,22 @@
         props:['batch'],
         mounted() {
             let vm = this;
-            let modal = $('#notification-modal');
+            let modal = $('#batch-view-modal');
             modal.modal({ keyboard: false });
             modal.on('hidden.bs.modal', function (e) {
                 vm.$emit('closed');
             });
         },
+        computed:{
+            course(){
+                return this.$store.getters.getCourseById(this.batch.course_id);
+            }
+        },
         methods:{
+            editBatch(){
+                $('#batch-view-modal').modal('hide');
+                this.$router.push({ name: 'management.batch.edit', params:{batch_id:this.batch._id}})
+            },
             getSessionCount(module_id){
                  let totalSessions = _.filter(this.batch.sessions, function (s) {
                      return s.module_id == module_id

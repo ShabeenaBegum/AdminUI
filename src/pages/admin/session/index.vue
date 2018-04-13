@@ -13,7 +13,7 @@
                                     {{ row[col] }}
                                 </span>
                                 <span  v-if="col === 'course_id'" >
-                                        Android
+                                        {{ course(batch.course_id).name}}
                                 </span>
                                 <span
                                         v-else-if="col === 'status'"
@@ -100,7 +100,10 @@
         methods:{
             showSessionModal(data){
                 log(data);
-            }
+            },
+            course(id){
+                return this.$store.getters.getCourseById(id);
+            },
         },
         computed:{
             sessions(){

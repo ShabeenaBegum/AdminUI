@@ -14,7 +14,10 @@
     import navigationBar from './layout/nav';
     export default {
         name: 'App',
-        components: {navigationBar}
+        components: {navigationBar},
+        created(){
+            this.$store.dispatch('LOAD_COURSE_LIST');
+        }
     }
 </script>
 

@@ -2,24 +2,13 @@
     <div class="container">
         <div class="justify-content-center">
             <center>
-                <geolocation id="map" v-model="address" />
-                {{ address }}
+                <h2>Home Page</h2>
             </center>
         </div>
     </div>
 </template>
 
 <script>
-    import geolocation from '@/components/geolocation'
     export default {
-        components:{geolocation},
-        mounted() {
-            console.log('Component mounted.')
-        },
-        data(){
-            return{
-                address:''
-            }
-        }
     }
 </script>

@@ -94,25 +94,31 @@
 
     export default {
         components: {datePicker, batchModal},
-        created() {
+        mounted() {
             let vm = this;
-            courseApi.getAllCourses(courses => {
-                vm.courses = courses.data;
-                let query = vm.$route.query;
-                if (query.course_id) {
-                    let selectCourse = _.find(vm.courses, { "_id" : query.course_id});
-                    if (selectCourse) {
-                        vm.selectedCourse = selectCourse;
-                    }
+            let query = vm.$route.query;
+            if (query.course_id) {
+                if(this.courses.length){
+                    vm.selectedCourse = this.$store.getters.getCourseById(query.course_id);
                 }
-            });
+            }
+            // courseApi.getAllCourses(courses => {
+            //     vm.courses = courses.data;
+            //     let query = vm.$route.query;
+            //     if (query.course_id) {
+            //         let selectCourse = _.find(vm.courses, { "_id" : query.course_id});
+            //         if (selectCourse) {
+            //             vm.selectedCourse = selectCourse;
+            //         }
+            //     }
+            // });
         },
         data() {
             return {
                 date: null,
                 batches: {},
-                courses: [],
                 selectedCourse: null,
+                selectedCourseId: null,
                 cols: constants.cols,
                 filters: constants.filters,
                 currentBatch: null
@@ -128,6 +134,11 @@
                     this.getBatchesByCourseId(page);
                 }
             }
+        },
+        computed:{
+          courses(){
+              return this.$store.state.courses;
+          }
         },
         methods: {
             showBatchModal(batch) {
@@ -150,7 +161,7 @@
                     let response = await axios.get(window.batchUrl + "/batch?course_id=" + this.selectedCourse._id + "&page=" + page);
                     this.batches = response.data.data;
                     history.pushState(null, null, '?course_id=' + this.selectedCourse._id + '&page=' + page);
-                } catch (error) {
+                }catch(error) {
                     log(error);
                 }
             }

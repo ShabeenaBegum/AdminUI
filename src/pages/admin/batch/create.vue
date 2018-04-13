@@ -214,13 +214,9 @@
     import courseApi from '@/services/course';
     export default {
         components: {datePicker, geolocation},
-        created() {
-            courseApi.getAllCourses(courses => this.courses=courses.data);
-        },
         data() {
             return {
                 users: [],
-                courses: [],
                 statuses: ['yet_to_start', 'pending', 'completed'],
                 mentors: [
                     {id: 1, name: 'mentor1'},
@@ -294,6 +290,9 @@
 
         },
         computed: {
+            courses(){
+              return this.$store.state.courses;
+            },
             course_plan_ids() {
                 let vm = this;
                 if (this.selectedCourse) {
