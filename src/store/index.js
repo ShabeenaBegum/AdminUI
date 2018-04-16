@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import courseApi from "@/services/course";
+import eventConstants from "@/constants/events";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -8,15 +9,16 @@ const store = new Vuex.Store({
         courses: []
     },
     actions: {
-        LOAD_COURSE_LIST(state) {
+        [eventConstants.LOAD_COURSE_LIST](state) {
            courseApi.getAllCourses(courses => {
-               state.commit('SET_COURSES', courses)
+               state.commit(eventConstants.SET_COURSES, courses)
            });
         }
     },
     mutations: {
-        SET_COURSES(state,courses){
-            state.courses = courses
+        [eventConstants.SET_COURSES](state,courses){
+            state.courses = courses;
+            eventHub.$emit(eventConstants.COURSE_LOADED);
         }
     },
     getters: {

@@ -9,12 +9,12 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <multiselect
-                                class="mr-4"
-                                v-model="selectedCourse"
-                                track-by="name"
-                                label="name"
-                                placeholder="Select Course"
-                                :options="courses">
+                                    class="mr-4"
+                                    v-model="selectedCourse"
+                                    track-by="name"
+                                    label="name"
+                                    placeholder="Select Course"
+                                    :options="courses">
                                 <template slot="singleLabel" slot-scope="{ option }">
                                     <span :class="{inactiveCourse: !option.active}">
                                         {{ option.name }}
@@ -27,7 +27,9 @@
                                 </template>
                             </multiselect>
 
-                            <button class="btn btn-primary" @click="$router.push({ name: 'management.batch.create'})">Create Batch</button>
+                            <button class="btn btn-primary" @click="$router.push({ name: 'management.batch.create'})">
+                                Create Batch
+                            </button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -70,9 +72,9 @@
             </div>
         </div>
         <batch-modal
-            v-if="currentBatch"
-            @closed="currentBatch = null"
-            :batch="currentBatch"/>
+                v-if="currentBatch"
+                @closed="currentBatch = null"
+                :batch="currentBatch"/>
     </div>
 </template>
 <style>
@@ -88,30 +90,23 @@
 </style>
 <script>
     import datePicker from 'vue-flatpickr-component';
-    import courseApi from '@/services/course';
     import constants from '@/constants/Batch/grid';
     import batchModal from '@/pages/admin/batch/view';
+    import eventConstant from "@/constants/events"
 
     export default {
         components: {datePicker, batchModal},
         mounted() {
             let vm = this;
+
             let query = vm.$route.query;
-            if (query.course_id) {
-                if(this.courses.length){
-                    vm.selectedCourse = this.$store.getters.getCourseById(query.course_id);
+            eventHub.$on(eventConstant.COURSE_LOADED, function () {
+                if (query.course_id) {
+                    if (vm.courses && vm.courses.length) {
+                        vm.selectedCourse = vm.$store.getters.getCourseById(query.course_id);
+                    }
                 }
-            }
-            // courseApi.getAllCourses(courses => {
-            //     vm.courses = courses.data;
-            //     let query = vm.$route.query;
-            //     if (query.course_id) {
-            //         let selectCourse = _.find(vm.courses, { "_id" : query.course_id});
-            //         if (selectCourse) {
-            //             vm.selectedCourse = selectCourse;
-            //         }
-            //     }
-            // });
+            });
         },
         data() {
             return {
@@ -135,10 +130,10 @@
                 }
             }
         },
-        computed:{
-          courses(){
-              return this.$store.state.courses;
-          }
+        computed: {
+            courses() {
+                return this.$store.state.courses;
+            }
         },
         methods: {
             showBatchModal(batch) {
@@ -161,7 +156,7 @@
                     let response = await axios.get(window.batchUrl + "/batch?course_id=" + this.selectedCourse._id + "&page=" + page);
                     this.batches = response.data.data;
                     history.pushState(null, null, '?course_id=' + this.selectedCourse._id + '&page=' + page);
-                }catch(error) {
+                } catch (error) {
                     log(error);
                 }
             }
