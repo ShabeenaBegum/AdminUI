@@ -14,8 +14,14 @@ Vue.mixin({
         _dis(value, placeHolder = "-"){
             return value ? value : placeHolder;
         },
+        _disArray(value, placeHolder = "-"){
+            return value.length ? value.length: placeHolder;
+        },
         pathIs(url, keyword){
             return url.includes(keyword);
+        },
+        converId(id){
+            return id.split('-').join('');
         },
         pluck(array, key) {
             let arr = [];
