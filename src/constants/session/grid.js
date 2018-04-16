@@ -1,16 +1,16 @@
 export default {
     cols: [
         {
+            name: "",
+            key: "status"
+        },
+        {
             name: "Heading",
             key: "heading"
         },
         {
             name: "Course",
             key: "course_id"
-        },
-        {
-            name: "Status",
-            key: "status"
         },
         {
             name: "Date / Time",

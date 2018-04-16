@@ -13,37 +13,35 @@
                                     {{ row[col] }}
                                 </span>
                                 <span  v-if="col === 'course_id'" >
-                                        {{ course(batch.course_id).name}}
+                                        {{ course(batch.course_id) ? course(batch.course_id).name : ''}}
                                 </span>
                                 <span
                                         v-else-if="col === 'status'"
+                                        class="text-center d-block"
                                         :class="{
                                             completed: row.status === 'completed',
                                             cancelled: row.status === 'cancelled'
                                             }"
                                 >
-                                    {{ row.status }}
+                                    <i class="fa fa-check-circle-o session-status-icon completed" v-if="row.status === 'completed'"></i>
+                                    <i class="fa fa-times-circle-o session-status-icon cancelled" v-if="row.status === 'cancelled'"></i>
+                                    <i class="fa fa-pause-circle-o session-status-icon pending" v-if="row.status === 'pending'"></i>
                                 </span>
-                                <span v-else-if="col === 'rating'">
+                                <span class="text-center d-block" v-else-if="col === 'rating'">
                                     4.1
                                 </span>
                                 <span v-else-if="col === 'date_time'">
                                     {{ formatDate(row.date, "DD MMM YY")}} @ {{ row.time}} IST
                                 </span>
                                 <!-- Rating -->
-                                <span v-else-if="col === 'attendance'">
+                                <span class="text-center d-block" v-else-if="col === 'attendance'">
                                     21/30
                                 </span>
-                                <span v-else-if="col === 'recording'">
+                                <span class="text-center d-block" v-else-if="col === 'recording'">
                                     View
                                 </span>
-                                <span v-else-if="col === 'no_of_students'">
+                                <span class="text-center d-block" v-else-if="col === 'no_of_students'">
                                     61
-                                </span>
-
-                                <span v-else-if="col === 'session'" title="View Sessions"
-                                      v-tippy>
-                                    <router-link :to="getSessionLink(row)">3/2</router-link>
                                 </span>
                                 <span v-else>{{ row[col] }}</span>
                             </template>
@@ -63,6 +61,18 @@
     }
     span.cancelled {
         color: red;
+    }
+    .session-status-icon{
+        font-size: 20px;
+    }
+    .session-status-icon.cancelled{
+        color: red;
+    }
+    .session-status-icon.pending{
+        color: orange;
+    }
+    .session-status-icon.completed{
+        color: green;
     }
 </style>
 <script>
