@@ -129,7 +129,7 @@
 </template>
 <style>
     .modal-lg {
-        max-width: 80%;
+        max-width: 80% !important;
     }
     .empty{
         align-items: center;
