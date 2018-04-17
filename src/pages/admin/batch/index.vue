@@ -96,10 +96,14 @@
 
     export default {
         components: {datePicker, batchModal},
-        mounted() {
+        created() {
             let vm = this;
-
             let query = vm.$route.query;
+            if (query.course_id) {
+                if (vm.courses && vm.courses.length) {
+                    vm.selectedCourse = vm.$store.getters.getCourseById(query.course_id);
+                }
+            }
             eventHub.$on(eventConstant.COURSE_LOADED, function () {
                 if (query.course_id) {
                     if (vm.courses && vm.courses.length) {

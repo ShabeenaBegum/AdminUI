@@ -92,4 +92,7 @@ router.beforeEach(function (to, from, next) {
 
 router.afterEach(function () { NProgress.done(); });
 
-Vue.use(VueTippy);
+Vue.use(VueTippy, {
+    placement: 'bottom',
+    arrow: true
+});

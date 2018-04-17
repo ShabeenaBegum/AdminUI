@@ -106,7 +106,7 @@
 </template>
 <style>
     .modal-lg {
-        max-width: 70%;
+        max-width: 70% !important;
     }
     .empty{
         align-items: center;
