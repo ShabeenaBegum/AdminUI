@@ -4,6 +4,8 @@ import BatchIndex from "../pages/admin/batch/index";
 import BatchCreate from "../pages/admin/batch/create";
 import BatchEdit from "../pages/admin/batch/edit";
 import MentorIndex from "../pages/admin/mentor/index";
+import MentorCreate from "../pages/admin/mentor/create";
+import MentorEdit from "../pages/admin/mentor/edit";
 import StudentIndex from "../pages/admin/student/index";
 import SessionIndex from "../pages/admin/session/index";
 
@@ -47,6 +49,17 @@ let routes = [
                 name:'management.batch.edit',
                 path: 'batch/edit/:batch_id',
                 component: BatchEdit,
+                props: true
+            },
+            {
+                name:'management.mentor.create',
+                path: 'mentor/create',
+                component: MentorCreate
+            },
+            {
+                name:'management.mentor.edit',
+                path: 'mentor/edit/:mentor_id',
+                component: MentorEdit,
                 props: true
             }
         ]
