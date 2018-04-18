@@ -17,7 +17,7 @@ export default {
             key: "pan"
         },
         {
-            name: "Course Id",
+            name: "Course",
             key: "course_id"
         },
         {
