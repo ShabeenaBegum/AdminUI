@@ -106,7 +106,7 @@
                     if(result) {
                         vm.mentor.user_type = 'mentor';
                         try{
-                            let mentor_created = await axios.post('http://users.local/api/users', vm.mentor);
+                            let mentor_created = await axios.post(window.UserUrl+'/users', vm.mentor);
                             if(mentor_created.status == 200){
                                 sflash('Mentor Created');
                                 this.$router.push({ name: 'management.mentor.index'});

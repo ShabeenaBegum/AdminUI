@@ -78,7 +78,7 @@
         props: ['mentor_id'],
         async created() {
             let vm = this;
-            await axios.get('http://users.local/api/users/'+vm.mentor_id)
+            await axios.get(window.UserUrl+'/users/'+vm.mentor_id)
                 .then(function(response){
                     vm.mentorData = response.data.data;
                 });
@@ -120,7 +120,7 @@
                     let result = await this.$validator.validateAll();
                     if(result) {
                         try{
-                            let mentor_updated = await axios.put('http://users.local/api/users/'+vm.mentorData._id, vm.mentorData);
+                            let mentor_updated = await axios.put(window.UserUrl+'/users/'+vm.mentorData._id, vm.mentorData);
                             if(mentor_updated.data.success == true){
                                 sflash('Mentor Updated');
                             } else {

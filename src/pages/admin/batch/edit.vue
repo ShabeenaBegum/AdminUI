@@ -125,7 +125,7 @@
 		                            <label for="status">Status</label>
 		                            <select v-model="batchData.status" class="form-control form-control-sm" name="status" v-validate="'required'">
 		                                <option selected value="">Select </option>
-		                                <option v-for="status in statuseStatuss" v-bind:value="status">{{status}}</option>
+		                                <option v-for="status in statuses" v-bind:value="status">{{status}}</option>
 		                            </select>
 		                        </div>
 		                    </div>
@@ -170,7 +170,7 @@
 		props: ['batch_id'],
 		async created() {
 			let vm = this;
-			await axios.get("http://batch.local/api/batch/"+vm.batch_id)
+			await axios.get(window.batchUrl+"/batch/"+vm.batch_id)
 				.then(function(response){
 					vm.batchData = response.data.data;
 					vm.course_plan_id = vm.batchData.course_plan_id;

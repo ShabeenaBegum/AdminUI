@@ -24,8 +24,8 @@ window.moment = moment;
 window.baseUrl = "http://apigatewaymock.test/api";
 window.contentUrl = "http://content.acadgild.co.in/api";
 window.batchUrl = "http://batch-points.acadgild.co.in/api";
-window.studentUrl = "http://user.acadgild.co.in/api";
-window.pointsUrl = "http://user.acadgild.co.in/api";
+window.UserUrl = "http://user.acadgild.co.in/api";
+window.pointsUrl = "http://points.acadgild.co.in/api";
 
 window.log = function (message) {
     console.log(message);

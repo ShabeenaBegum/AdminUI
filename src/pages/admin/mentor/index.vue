@@ -95,7 +95,7 @@
         methods: {
             async getMentorsByCourseId(page){
                 let vm = this;
-                await axios.get('http://users.local/api/users/user_type/mentor?course_id='+vm.selectedCourse._id+ "&page=" + page)
+                await axios.get(window.UserUrl+'/users/user_type/mentor?course_id='+vm.selectedCourse._id+ "&page=" + page)
                     .then(function(response){
                         vm.mentors = response.data.data;
                 });  
