@@ -1,20 +1,28 @@
 export default {
     cols: [
         {
+            name: "",
+            key: "status"
+        },
+        {
             name: "Heading",
             key: "heading"
+        },
+        {
+            name: "Batch",
+            key: "batch_name"
         },
         {
             name: "Course",
             key: "course_id"
         },
         {
-            name: "Status",
-            key: "status"
-        },
-        {
             name: "Date / Time",
             key: "date_time"
+        },
+        {
+          name: "Meeting Link",
+          key: "meeting_link"
         },
         {
             name: "Rating",
@@ -37,9 +45,9 @@ export default {
             key: "mentor"
         },
         {
-            name: "Students",
-            key: "no_of_students"
-        },
+            name: "Action",
+            key: "action"
+        }
     ],
     filters: [
         {
