@@ -124,8 +124,8 @@
 		                        <div class="form-group">
 		                            <label for="status">Status</label>
 		                            <select v-model="batchData.status" class="form-control form-control-sm" name="status" v-validate="'required'">
-		                                <option selected value="">Select Status</option>
-		                                <option v-for="status in statuses" v-bind:value="status">{{status}}</option>
+		                                <option selected value="">Select </option>
+		                                <option v-for="status in statuseStatuss" v-bind:value="status">{{status}}</option>
 		                            </select>
 		                        </div>
 		                    </div>
@@ -164,12 +164,9 @@
 	import datePicker from 'vue-flatpickr-component';
 	import geolocation from '@/components/geolocation';
 	import moment from 'moment';
-	import { ErrorBag } from 'vee-validate';
-
-	
 
 	export default {
-		components: { datePicker, geolocation, ErrorBag },
+		components: { datePicker, geolocation },
 		props: ['batch_id'],
 		async created() {
 			let vm = this;
@@ -232,11 +229,8 @@
                 }
             },
             "batchData.start_date"(){
-            	const bag = new ErrorBag();
             	if( this.batchData.start_date != this.start_date){
-            		$('#batch-days').empty();
-	                this.batchData.days = [];
-            		bag.clear(); 
+            		$('#batch-days').empty(); 
 	                var dt = moment(this.batchData.start_date, "YYYY-MM-DD HH:mm:ss");
 	                var selected_day = (dt.format('dddd'));
 	                if(this.batchData.start_date)
