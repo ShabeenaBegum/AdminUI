@@ -2,7 +2,7 @@ export default {
     cols: [
         {
             name: "name",
-            key: "name"
+            key: "batch_name"
         },
         {
             name: "start Date",
@@ -31,6 +31,10 @@ export default {
         {
             name: "Mode",
             key: "mode_of_training"
+        },
+        {
+            name: "Students",
+            key: "no_of_students"
         },
         {
             name: "Sessions",

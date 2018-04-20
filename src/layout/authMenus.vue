@@ -2,7 +2,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="mainNavDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dashboard
+                <i class="fa fa-th-large mr-1"></i><span id="currentMenuText" class="text-capitalize">Dashboard</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="mainNavDropDown">
                 <router-link active-class="sidebar-active" class="dropdown-item" :to="{name :'management.batch.index'}"><i class="fa fa-bookmark"></i>&nbsp;Batch Management</router-link>

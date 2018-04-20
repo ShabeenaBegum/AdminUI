@@ -2,7 +2,7 @@
         <div class="main">
             <navigation-bar/>
             <div class="content-body">
-                <transition name="fade" mode="out-in">
+                <transition name="fade">
                     <router-view/>
                 </transition>
             </div>
@@ -22,5 +22,17 @@
     @import './assets/sass/app.scss';
     .content-body {
         margin-top: 80px;
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition-property: opacity;
+        transition-duration: .08s;
+        transition-timing-function: ease;
+    }
+    .fade-enter-active {
+        transition-delay: .08s;
+        transition-timing-function: ease;
+    }
+    .fade-enter, .fade-leave-active {
+        opacity: 0
     }
 </style>
