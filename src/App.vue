@@ -11,10 +11,14 @@
 </template>
 
 <script>
-    import navigationBar from './layout/nav';
+    import navigationBar from '@/layout/nav';
+    import eventConstants from '@/constants/events';
     export default {
         name: 'App',
-        components: {navigationBar}
+        components: {navigationBar},
+        created(){
+            this.$store.dispatch(eventConstants.LOAD_COURSE_LIST);
+        }
     }
 </script>
 

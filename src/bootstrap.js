@@ -11,6 +11,7 @@ import moment from "moment";
 import VueTippy from 'vue-tippy';
 import sweetalert from "sweetalert";
 
+
 window.swal = sweetalert;
 window._ = lodash;
 try {
@@ -23,8 +24,8 @@ window.moment = moment;
 window.baseUrl = "http://apigatewaymock.test/api";
 window.contentUrl = "http://content.acadgild.co.in/api";
 window.batchUrl = "http://batch-points.acadgild.co.in/api";
-window.studentUrl = "http://user.acadgild.co.in/api";
-window.pointsUrl = "http://user.acadgild.co.in/api";
+window.UserUrl = "http://user.acadgild.co.in/api";
+window.pointsUrl = "http://points.acadgild.co.in/api";
 
 window.log = function (message) {
     console.log(message);
@@ -36,21 +37,28 @@ window.axios.interceptors.request.use(function (config) {
 }, function (error) {
     log(error);
     NProgress.done();
+    nativeToast({
+        message: 'Ajax Request Failed!!',
+        position: 'bottom',
+        type: 'error',
+        edge: true
+    });
     return Promise.reject(error);
 });
 
 window.axios.interceptors.response.use(function (response) {
     NProgress.done();
+    log("response");
     return response;
 }, function (error) {
     NProgress.done();
+    log(error);
     nativeToast({
-        message: 'Ajax Call Failed!!',
+        message: 'Ajax Response Failed!!',
         position: 'bottom',
         type: 'error',
         edge: true
     });
-    log(error);
     return Promise.reject(error);
 });
 
@@ -64,18 +72,27 @@ window.flash = function (message, type = 'success') {
 window.sflash = function (message, type = 'success') {
     swal({ icon: type, title: message, text: " ", button: false, timer: 1500});
 };
+function genUUID() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return s4() + s4() + '-' + s4() + s4() + '-' + s4() + s4() +'-'+Date.now();
+}
 
 if (authService.check()) {
     window.axios.defaults.headers.common['Authorization'] = "Bearer " + authService.getToken();
 }
 
 router.beforeEach(function (to, from, next) {
-    NProgress.start();
+    window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    window.axios.defaults.headers.common['X-Ag-Request-Id'] = genUUID();
+    try{NProgress.start()}catch (e) {log("nprogress failed")};
     next();
 });
 
-router.afterEach(function () {
-    NProgress.done();
-});
+router.afterEach(function () { NProgress.done(); });
 
-Vue.use(VueTippy);
+Vue.use(VueTippy, {
+    placement: 'bottom',
+    arrow: true
+});

@@ -1,10 +1,16 @@
 <template>
-	 <div class="container">
+	 <div class="container" v-if="batchData" >
         <div class="container justify-content-center">
         	<!-- <form> -->
                 <div class="card card-default">
                     <div class="card-header">Edit Details</div>
                     <div class="card-body">
+                		<div v-if="errors.items.length" class="alert alert-danger">
+		                    <strong>Oops !!  There are some validation error</strong>
+		                    <ul>
+		                        <li v-for="error in errors.items" v-text="error.msg"></li>
+		                    </ul>
+		                </div>
                     	<div class="row">
                     		<div class="col">
                     			<div class="form-group">
@@ -13,7 +19,7 @@
 		                            	<multiselect
 		                                        class="mr-4"
 		                                        :disabled="batchData.status != 'yet_to_start'"
-		                                        v-model="batchData.course_plan_id"
+		                                        v-model="selectedCoursePlan"
 		                                        label="course_plan_id"
 		                                        :searchable="true"
 		                                        placeholder="Select Course Plan"
@@ -93,15 +99,16 @@
 		                    </div>
 		                </div>
 	                    <div class="row">
-		                    <div v-for="(selectedDay, index) in batchData.days" class="col-2">
+		                    <div v-for="(selectedDay, index) in batchData.days" class="col-2 batch-days">
 		                        <label>{{selectedDay.day}}</label>
-		                        <date-picker v-model="selectedDay.time"
-		                                     :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
-		                                     class="form-control form-control-sm"
-		                                     v-validate="'required'"
-		                                     :disabled="batchData.status != 'yet_to_start'"
-		                                     :data-vv-name="selectedDay.day"
-		                                     :has-error="errors.has('selectedDay.day')">
+		                        
+		                        <date-picker v-validate="'required'" 
+		                         	 v-model="selectedDay.time"
+                                     :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
+                                     class="form-control form-control-sm"
+                                     
+                                     :data-vv-name="selectedDay.day"
+                                     :has-error="errors.has('selectedDay.day')">
 		                        </date-picker>
 		                    </div>
 		                </div>
@@ -109,15 +116,15 @@
 		                    <div class="col">
 		                        <div class="form-group">
 		                            <label for="location">Location</label>
-		                            <geolocation id="map" v-model="address" class="form-control form-control-sm"/>
-		                            <!--<input v-model="newBatch.location" class="form-control form-control-sm"/>-->
+		                            <geolocation id="map" v-model="batchData.location" class="form-control form-control-sm" :value="batchData.location.formatted_address" v-validate="'required'" :has-error="errors.has('batchData.location')"/>
+		                            
 		                        </div>
 		                    </div>
 		                    <div class="col">
 		                        <div class="form-group">
 		                            <label for="status">Status</label>
 		                            <select v-model="batchData.status" class="form-control form-control-sm" name="status" v-validate="'required'">
-		                                <option selected value="">Select Status</option>
+		                                <option selected value="">Select </option>
 		                                <option v-for="status in statuses" v-bind:value="status">{{status}}</option>
 		                            </select>
 		                        </div>
@@ -157,34 +164,38 @@
 	import datePicker from 'vue-flatpickr-component';
 	import geolocation from '@/components/geolocation';
 	import moment from 'moment';
+
 	export default {
 		components: { datePicker, geolocation },
 		props: ['batch_id'],
 		async created() {
 			let vm = this;
-			await axios.get("http://batch.local/api/batch?batch_ids="+vm.batch_id)
+			await axios.get(window.batchUrl+"/batch/"+vm.batch_id)
 				.then(function(response){
-					vm.batchData = response.data.data.data[0];
+					vm.batchData = response.data.data;
+					vm.course_plan_id = vm.batchData.course_plan_id;
+					vm.start_date = vm.batchData.start_date;
 				}).catch(function(error){
 					log(error);
 				});
 			await axios.get(window.contentUrl+"/course-plan?course_id="+vm.batchData.course_id)
 				.then(function(response){
-					log('plan');
-					log(response);
-					vm.selectedCoursePlans = response.data.data;
+					vm.coursePlans = response.data.data;
+					vm.selectedCoursePlan = _.find(vm.coursePlans,function(cp){
+						return vm.batchData.course_plan_id == cp._id;
+					})
 				}).catch(function(error){
 					log(error)
 				})
-			vm.course_plan_id = vm.batchData.course_plan_id;
-			vm.start_date = vm.batchData.start_date;
+			
 		},
 		data() {
             return {
                 users: [],
-                batchData: [],
+                batchData: null,
                 batchDataCopy:[],
-                selectedCoursePlans: [],
+              	coursePlans: [],
+              	selectedCoursePlan: [],
                 days: [
                     {day: 'Monday', time: ''},
                     {day: 'Tuesday', time: ''},
@@ -200,41 +211,39 @@
                     {id: 2, name: 'mentor2'},
                     {id: 3, name: 'mentor3'},
                 ],
-                address: null,
                 start_date: null,
                 course_plan_id: null
            }
 
 		},
 		watch: {
-            "batchData.course_plan_id"() {
+            selectedCoursePlan() {
             	 
-                // this.batchData.course_plan_id = this.selectedCoursePlan ? this.selectedCoursePlan.id : null;
-                /*if(this.selectedCoursePlan){
-                    this.newBatch.duration = this.selectedCoursePlan.duration ? this.selectedCoursePlan.duration : null;
-                    this.newBatch.mode_of_training = this.selectedCoursePlan.mode_of_training ? this.selectedCoursePlan.mode_of_training : null;
+                this.batchData.course_plan_id = this.selectedCoursePlan ? this.selectedCoursePlan._id : null;
+                if(this.selectedCoursePlan){
+                    this.batchData.duration = this.selectedCoursePlan.weeks ? this.selectedCoursePlan.weeks : null;
+                    this.batchData.mode_of_training = this.selectedCoursePlan.mode_of_training ? this.selectedCoursePlan.mode_of_training : null;
                 } else {
-                    this.newBatch.duration = null;
-                    this.newBatch.mode_of_training = null;
-                }*/
+                    this.batchData.duration = null;
+                    this.batchData.mode_of_training = null;
+                }
             },
             "batchData.start_date"(){
-                this.batchData.days = [];
-                var dt = moment(this.batchData.start_date, "YYYY-MM-DD HH:mm:ss");
-                var selected_day = (dt.format('dddd'));
-                if(this.batchData.start_date)
-                this.batchData.days.push({day: selected_day, time: ""});
-            },
-            address() {
-                // this.newBatch.location = this.address ? this.address : null;
+            	if( this.batchData.start_date != this.start_date){
+            		$('#batch-days').empty(); 
+	                var dt = moment(this.batchData.start_date, "YYYY-MM-DD HH:mm:ss");
+	                var selected_day = (dt.format('dddd'));
+	                if(this.batchData.start_date)
+	                this.batchData.days.push({day: selected_day, time: ""});
+            	}
             }
 
         },
         computed: {
             course_plan_ids() {
                 let vm = this;
-                if (this.selectedCoursePlans) {
-                    return this.selectedCoursePlans;
+                if (this.coursePlans) {
+                    return this.coursePlans;
                 }
                 return [];
                
@@ -243,40 +252,56 @@
 
         },
         methods: {
-            editBatch(){
+            async editBatch(){
             	let vm = this;
-                let result = this.$validator.validateAll().then(function (result) {
-                    alert('hii');
-                });
-                vm.batchDataCopy = {...vm.batchData};
+            	let result = await this.$validator.validateAll();
+                if(result){
+                    try{
+                    	var batch_date = new Date(vm.batchData.start_date); //dd-mm-YYYY
+						var today = new Date();
+						if(batch_date > today){
+		                
+			                vm.batchDataCopy = {...vm.batchData};
+			                if(vm.batchData.course_plan_id == vm.course_plan_id){
+			                	delete vm.batchDataCopy.course_plan_id;
+			                } else {
+			                	delete vm.batchDataCopy.modules;
+			                	delete vm.batchDataCopy.sessions;
+			                	try{
+				                	let coursePlan = await axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.batchData.course_plan_id);
+				                    if((coursePlan.status == 200)&&(coursePlan.data.data.modules != undefined)&&(coursePlan.data.data.sessions != undefined) )
+				                    {
+				                        vm.batchDataCopy.modules = coursePlan.data.data.modules;
+				                        vm.batchDataCopy.sessions = coursePlan.data.data.sessions;
+				                    } 
+			                		
+			                	} catch(error){
+			                		log(error);
+			                        sflash('Content Not updated contact support team!', 'error');
+			                    }
+			                }
+			                if(vm.batchData.start_date == vm.start_date){
+			                	delete vm.batchDataCopy.start_date;
+			                }
+			                try{
+			                	let upadatedBatch = await axios.put('http://batch.local/api/batch/'+vm.batchDataCopy._id, vm.batchDataCopy);
+			                	sflash('Batch updated');
+			                } catch(error){
+			                	sflash('Batch not updated!', 'error');
+			                	log(error);
+			                }
 
-                if(vm.batchData.course_plan_id == vm.course_plan_id){
-                	delete vm.batchDataCopy.course_plan_id;
-                } else {
-                	vm.batchDataCopy.course_plan_id = vm.batchData.course_plan_id;
-                	delete vm.batchDataCopy.modules;
-                	delete vm.batchDataCopy.sessions;
-                	let coursePlan = axios.get(window.contentUrl+"/content/csd?course_plan_id="+vm.batchData.course_plan_id);
-                    if((coursePlan.status == 200)&&(coursePlan.data.modules != undefined)&&(coursePlan.data.sessions != undefined) )
-                    {
-                        vm.batchDataCopy.modules = coursePlan.data.data.modules;
-                        vm.batchDataCopy.sessions = coursePlan.data.data.sessions;
-                    } else {
-                        flash('Content Not updated contact support team!', 'danger');
+		            	} else {
+		            		sflash('Start data must be equal to or greater than today!','error');
+		            	}	
                     }
-                }
-                	
-
-                if(vm.batchData.start_date == vm.start_date){
-                	log('inside');
-                	delete vm.batchDataCopy.start_date;
-                } else {
-                	vm.batchDataCopy.start_date = vm.batchData.start_date;
-                }
-                	log(vm.batchDataCopy);
-
-                axios.put('http://batch.local/api/batch/'+vm.batchDataCopy._id, vm.batchDataCopy).then(response => console.log(response));
-            }
-        }
+                    catch(error){
+                    	log(error);
+                    }
+                
+                
+            	}
+        	}
+		}
 	}
 </script>

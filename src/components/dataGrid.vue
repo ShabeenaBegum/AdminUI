@@ -9,7 +9,7 @@
             </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, index) in data.data" :key="index">
+                <tr v-for="(row, index) in data.data" :key="index" @click="$emit('rowClicked', row)">
                     <td v-for="(key, index1) in cols" :key="index1">
                         <slot :row="row" :col="typeof row === 'object' ? key.key : key">
                             {{typeof row === 'object' ? row[key.key] : row[key]}}

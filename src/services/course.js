@@ -1,10 +1,10 @@
 export default {
-    async getAllCourses(cb){
+    async getAllCourses(cb, ecb = null){
         try{
             let response = await axios.get(window.contentUrl + "/course");
-            cb(response.data);
+            cb(response.data.data);
         }catch (e) {
-            cb({data:[]});
+            ecb ? ecb(e) : '';
         }
     }
 }
