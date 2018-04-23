@@ -252,7 +252,7 @@
                 <hr>
                 <div class="col-sm-4"></div>
                 <div class="col-sm-8">
-                    <button id="course-update" type="submit" class="btn btn-lg btn-primary" :disabled="errors.items.length">Save</button>
+                    <button id="course-update" type="submit" class="btn btn-lg btn-primary">Save</button>
                 </div>
             </form>
         </div>

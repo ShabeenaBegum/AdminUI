@@ -26,7 +26,7 @@
                                 <div class="col editbutton">
                                     <button type="button" class="btn btn-primary" @click="edit('nameedit')">Edit</button>
                                     <button type="button" class="btn btn-success" @click="update('name')">Save</button>
-                                   
+
                                 </div>
 
                             </div>
@@ -146,7 +146,165 @@
                   
 			  </div>
 			  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-			  	
+			  	 <div class="card card-default">
+                    <div class="card-body">
+                    	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+						  Add Course Plan
+						</button>
+						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel">Course Plan</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+                                 <div class="row">
+		                            <div class="col">
+		                                 <label for="plannameadd">Plan Name<sup style="color:red">*</sup></label>
+		                                 <input v-model="plannameadd" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="plannameadd" name="plannameadd" class="form-control" >
+		                                  <span v-show="errors.has('plannameadd')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('planname') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+		                            <div class="col">
+		                                 <label for="totalsessionadd">Total Session<sup style="color:red">*</sup></label>
+		                                 <input v-model="totalsessionadd" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="totalsessionadd" name="totalsessionadd" class="form-control" >
+		                                  <span v-show="errors.has('totalsessionadd')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('totalsession') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+		                            <div class="col">
+		                                 <label for="sessiondurationadd">Session Duration<sup style="color:red">*</sup></label>
+		                                 <input v-model="sessiondurationadd" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="sessiondurationadd" name="sessiondurationadd" class="form-control" >
+		                                  <span v-show="errors.has('sessiondurationadd')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('sessionduration') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+                                 	<div class="col">
+                                 		 <label for="active"> Active</label>
+		                                <select id="course_active" v-model="planactiveadd" name="active" class="form-control" >
+		                                    <option value="true">yes</option>
+		                                    <option value="false">no</option>
+		                                </select>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+
+                                 </div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						        <button type="button" class="btn btn-primary" @click="addcourseplan()">Save changes</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+                    </div>
+                </div>
+                
+                <div v-for="item in each_course_plan" :key="item._id">
+                <hr>
+                
+                <courseplancomponent :planid="item._id"></courseplancomponent>
+                <!-- <div class="card card-default">
+                    <div class="card-body">
+                    	<div class="row">
+                    		<div class="col">
+                    			<h2>Course Plan Details</h2>
+                    		</div>
+                    		<div class="col">
+                    		</div>
+                    		<div class="col">
+                    			<button type="button" class="btn btn-primary" @click="editcourseplan(item._id)">Edit Course Plan
+								</button>
+								<button type="button" class="btn btn-success" @click="savecourseplan()">Save Course Plan
+								</button>
+                    		</div>
+                    	</div>
+                    	
+                    	<div class="row">
+		                            <div class="col">
+		                                 <label for="planname">Plan Name<sup style="color:red">*</sup></label>
+		                                  {{planname=item.name}}
+		                                  {{item._id}}
+		                                 <input v-model="planname" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="planname" name="planname" class="form-control" >
+		                                  <span v-show="errors.has('planname')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('planname') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+		                            <div class="col">
+		                                 <label for="totalsession">Total Session<sup style="color:red">*</sup></label>
+		                                 {{totalsession=item.total_sessions}}
+		                                 <input v-model="totalsession" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="totalsession" name="totalsession" class="form-control" >
+		                                  <span v-show="errors.has('totalsession')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('totalsession') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+		                            <div class="col">
+		                                 <label for="sessionduration">Session Duration<sup style="color:red">*</sup></label>
+		                                 {{sessionduration=item.session_duration}}
+		                                 <input v-model="sessionduration" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="sessionduration" name="sessionduration" class="form-control" >
+		                                  <span v-show="errors.has('name')"
+		                                          class="help text-danger">
+		                                        {{ errors.first('sessionduration') }}
+		                                  </span>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+                                 </div>
+                                 <div class="row">
+                                 	<div class="col">
+                                 		{{planactive=item.status}}
+                                 		 <label for="active"> Active</label>
+		                                <select id="course_active" v-model="planactive" name="active" class="form-control" >
+		                                    <option value="0">yes</option>
+		                                    <option value="1">no</option>
+		                                </select>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                    
+
+                                 </div>
+                             </div>
+                    	
+                    </div> -->
+                </div>
 			  </div>
 			</div>
         </div>
@@ -167,8 +325,10 @@
     }
 </style>
 <script>
+import courseplancomponent from './courseplancomponent';
    export default {
    	   props: ['course_id'],
+   	   components:{courseplancomponent},
    	   async created(){
             
             try{
@@ -197,7 +357,30 @@
             		
                     console.log("error happened ");
             }
+
+            try{
+                 let response = await axios.get(window.contentUrl+"/course-plan?course_id="+this.course_id);
+                 this.course_plan=response.data.data;
+                 // log(response);
+            }catch(error){
+
+            }
    	   },
+   	   computed:{
+            each_course_plan(){
+                var each_course_plan=[];
+                var i=0;
+                this.course_plan.forEach(function(element) {
+                 
+                  each_course_plan[i]=element;
+                  i++;
+
+
+                });
+               return each_course_plan;
+
+            }
+        },
        data() {
             return{
                 
@@ -211,6 +394,7 @@
                 h1edit:0,
                 h2edit:0,
                 titleedit:0,
+                courseplanedit:'',
                 name:'',
                 type:'category',
                 description:'',
@@ -222,15 +406,50 @@
                 h2:'',
                 title:'',
                 course:[],
+                oneplan:[],
                 course_original:[],
                 parent_course:'',
                 course_category:'',
-                bundle_courses:[]
+                bundle_courses:[],
+                course_plan:[],
+                planname:'',
+                totalsession:0,
+                sessionduration:0,
+                planactive:0,
+                plannameadd:'',
+                planactiveadd:0,
+                totalsessionadd:'',
+                sessiondurationadd:'',
+                plan_id:'hfgfgg'
             }
         },
         methods: {
             
+           addcourseplan(){
            
+           	if(this.planactiveadd==='true'){
+               
+               this.planactiveadd=1;
+           	}
+           	else{
+
+           	  this.planactiveadd=0;
+           	}
+           	
+             // axios.post(window.contentUrl+"/course-plan?course_id="+this.course_id, {
+             //        "name":this.plannameadd,
+	            //     "status":this.planactiveadd,
+	            //     "total_sessions":this.totalsessionadd,
+	            //     "session_duration":this.sessiondurationadd
+             //      })
+             //      .then(function (response) {
+             //        console.log(response);
+             //      })
+             //      .catch(function (error) {
+             //        console.log(error);
+                    
+             //      });
+           },
             edit(parameter){
 
             	var v1='this.'.concat(parameter);
