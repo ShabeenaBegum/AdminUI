@@ -95,7 +95,8 @@
            
             }catch (error){
             		
-                    console.log("error happened ");
+                    console.log("error what happened to u man! and what will happen to you");
+                    console.log("hi this is avagmah. and this and that and those and them and his and her and herself and himself ");
             }
 
            
@@ -109,8 +110,8 @@
             	totalsession:0,
             	planactive:0,
             	plan:[],
-            	edit:0
-            	
+            	edit:0,
+
 
                 }
     },
@@ -126,7 +127,9 @@
            log(this.sessionduration);
            log(this.totalsession);
            log(this.planactive);
-           log(".....");
+           log(this.sessionduration);
+           log(this.sessionduration);
+           log(this.planid);
 
     	}
     }

@@ -58,6 +58,74 @@
                                     <button type="button" class="btn btn-success" @click="update('active')">Save</button>
                                 </div>
                             </div>
+                            <!-- show only if course type is course -->
+                            <div v-if="type==='course' ">
+                            <div class="row">
+                            	<div class="col">
+                                <label for="mod_of_training">Mode Of Training</label>
+                                <select id="mod_of_training" v-model="mod_of_training" name="mod_of_training" class="form-control" :disabled="modeoftraingedit === 0" >
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                </select>
+                                </div>
+                                <div class="col">
+                                </div>
+                                <div class="col editbutton">
+                                    <button type="button" class="btn btn-primary" @click="edit('modeoftraingedit')">Edit</button>
+                                    <button type="button" class="btn btn-success" @click="update('mod_of_training')">Save</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                 <div class="col">
+	                            <label for="certificationlink">Certification Link<sup style="color:red">*</sup></label>
+	                            <input type="text" v-model="certification_link" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" id="certificationlink" name="description" class="form-control" :disabled="certificationlinkedit === 0">
+	                             <span v-show="errors.has('certificationlink')"
+	                                      class="help text-danger">
+	                                    {{ errors.first('certificationlink') }}
+	                             </span>
+	                             </div>
+	                             <div class="col">
+                                 </div>
+                                 <div class="col editbutton">
+                                    <button type="button" class="btn btn-primary" @click="edit('certificationlinkedit')">Edit</button>
+                                    <button type="button" class="btn btn-success" @click="update('certification_link')">Save</button>
+                                 </div>
+                            </div>
+                            <div class="row">
+                            	<div class="col">
+	                               <label for="course_info">Course Info<sup style="color:red">*</sup></label>
+	                                <input type="text" v-model="course_info" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" id="course_info" name="course_info" class="form-control" :disabled="courseinfoedit === 0">
+	                                <span v-show="errors.has('course_info')"
+	                                          class="help text-danger">
+	                                        {{ errors.first('course_info') }}
+	                                </span>
+                               </div>
+	                           <div class="col">
+	                           </div>
+                                <div class="col editbutton">
+                                    <button type="button" class="btn btn-primary" @click="edit('courseinfoedit')">Edit</button>
+                                    <button type="button" class="btn btn-success" @click="update('course_info')">Save</button>
+                                </div>
+                            
+                            </div>
+                            <div class="row">
+	                            <div class="col">
+	                                <label for="learner">Learner<sup style="color:red">*</sup></label>
+	                                <input type="text" v-model="learner" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" id="learner" name="learner" class="form-control" :disabled="learneredit === 0">
+	                                <span v-show="errors.has('learner')"
+	                                          class="help text-danger">
+	                                        {{ errors.first('learner') }}
+	                                </span>
+	                            </div>
+	                           <div class="col">
+	                           </div>
+                                <div class="col editbutton">
+                                    <button type="button" class="btn btn-primary" @click="edit('learneredit')">Edit</button>
+                                    <button type="button" class="btn btn-success" @click="update('learner')">Save</button>
+                                </div>
+                            </div>
+                            </div>
+                            <!-- end for show only if type is course -->
                             <div v-if="type==='course' || type==='bundle'">
                             <div class="row">
                                <div class="col">
@@ -336,7 +404,7 @@ import courseplancomponent from './courseplancomponent';
                 this.course=response.data.data;
                 this.course_original=response.data.data;
                 this.name=this.course.name;
-                //this.type=this.course.type;
+                this.type=this.course.type;
                 this.term=this.course.term;
                 this.description=this.course.description;
                 this.active=this.course.active;
@@ -389,6 +457,10 @@ import courseplancomponent from './courseplancomponent';
                 editdescription:0,
                 activeedit:0,
                 freeedit:0,
+                modeoftraingedit:0,
+                certificationlinkedit:0,
+                courseinfoedit:0,
+                learneredit:0,
                 metadataedit:0,
                 metadatadescedit:0,
                 h1edit:0,
@@ -400,6 +472,10 @@ import courseplancomponent from './courseplancomponent';
                 description:'',
                 active:false,
                 free:false,
+                mode_of_training:false,
+                certification_link:'',
+                course_info:'',
+                learner:0,
                 meta_name:'',
                 meta_description:'',
                 h1:'',
@@ -420,7 +496,8 @@ import courseplancomponent from './courseplancomponent';
                 planactiveadd:0,
                 totalsessionadd:'',
                 sessiondurationadd:'',
-                plan_id:'hfgfgg'
+                plan_id:'',
+                mod_of_training:''
             }
         },
         methods: {
@@ -483,14 +560,18 @@ import courseplancomponent from './courseplancomponent';
                	    var metaobject={"meta_info":new_object};
                	    var new_object=$.extend({}, this.course_original, metaobject);
                	    this.course_original=new_object;
-                    // console.log(new_object);
+                    console.log(new_object);
+                    
+
                }
                else
                {
                      var object={[parameter]:eval('this.'.concat(parameter))};
                      var new_object=$.extend({}, this.course_original, object);
                      this.course_original=new_object;
-                     // console.log(new_object);
+                     console.log(new_object);
+                     console.log(this.new_object);
+                     log("");
                }
                
                 axios.put(window.contentUrl+"/course/"+this.course_id, new_object)
@@ -499,6 +580,7 @@ import courseplancomponent from './courseplancomponent';
                   })
                   .catch(function (error) {
                     console.log(error);
+                    
                     
                   });
 

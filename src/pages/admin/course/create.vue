@@ -3,11 +3,10 @@
         <div class="container justify-content-center">
             <h2>Create Course</h2>
             <hr>
-            <form id="course_form" @submit.prevent="checkForm()">
+            <form id="course_form" @submit.prevent="checkForm()">           
                 <div class="card card-default">
                     <div class="card-header">Type Info.</div>
                     <div class="card-body">
-
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
@@ -17,6 +16,7 @@
                                         <option value="parent">Parent</option>
                                         <option value="course">Course</option>
                                         <option value="category">Category</option>
+                                        <option value="group">Group</option>
                                      </select>
                                 </div>
                             </div>
@@ -25,7 +25,7 @@
                             <div class="col">
                             </div>
                         </div>
-                        <div v-if="type==='bundle' || type==='course'">
+                        <div v-if="type==='group' ">
                             <div class="row">
                                 <div class="col">
                                     <label for="parentcourse">Parent Course</label>
@@ -39,30 +39,83 @@
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="course_catergory">Course Category</label>
-                                    <select id="course_catergory" v-model="course_catergory" name="course_catergory" class="form-control" >
-                                    <option value="big data and analytics">Big Data and Analytics</option>
-                                    <option value="technical courses">Technical Courses</option>
-                                    <option value="project management">Project Management</option>
-                                    <option value="certification courses">Certification Courses</option>
-                                    <option value="self paced courses">Self Paced Courses</option>
-                                </select>
                                 </div>
                                 <div class="col">
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr>
+                <!-- only for course  -->
+                <div v-if="type==='course' || type==='bundle'">
+                    <div class="card card-default">
+                        <div class="card-header">Selection</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="course_group">Group</label>
+                                    <select id="course_group" name="course_group" v-model="course_group" @change="coursegroupchange()" class="form-control" >
+                                        <option value="android">Android</option>
+                                        <option value="bigdata">Big Data</option>
+                                     </select>
+                                </div>
+                                <div class="col">
+                                    <label for="mode_of_training">Mode of traning</label>
+                                    <select id="mode_of_training" name="mode_of_training" v-model="mode_of_training" @change="modetrainingchange()" class="form-control" >
+                                        <option value="online">Online</option>
+                                        <option value="offline">Offline</option>
+                                        <option value="selfpaced">Self Paced</option>
+                                     </select>
+                                </div>
+                                <div class="col">
+                                    <label for="certificate">Certificate</label>
+                                    <select id="certificate" name="certificate" v-model="certificate" @change="certificatechange()" class="form-control" >
+                                        <option value="cert">Cert</option>
+                                        <option value="noncert">Non Cert</option>
+                                     </select>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="bu">University</label>
+                                    <select id="bu" name="bu" v-model="bu" @change="" class="form-control" >
+                                        <option value="">AG</option>
+                                        <option value="">BDU</option>
+                                     </select>
+                                </div>
+                                <div class="col">
+                                    <label for="sub_bu">Sub University</label>
+                                    <select id="sub_bu" name="sub_bu" v-model="sub_bu" @change="" class="form-control" >
+                                        <option value="">AG_CENTRAL</option>
+                                        <option value="">AG_BMTC</option>
+                                     </select>
+                                </div>
+                                <div class="col">
+                                    <label for="region">Region</label>
+                                    <select id="region" name="region" v-model="region" @change="regionchange()" class="form-control" >
+                                        <option value="in">IN</option>
+                                        <option value="usa">USA</option>
+                                        <option value="row">ROW</option>
+                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr>
+                </div>
+                <!--  -->
                 <div class="card card-default">
                     <div class="card-header">Basic Info.</div>
                     <div class="card-body">
 
                         <div class="row">
                             <div class="col">
-                                 <label for="name">Name<sup style="color:red">*</sup></label>
-                                 <input v-model="name" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="course_name" name="name" class="form-control" >
+                                 <label for="name"> Product Name<sup style="color:red">*</sup></label>
+                                 <input v-model="productname" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="course_name" name="name" class="form-control" :disabled="disabled_name === 0">
                                   <span v-show="errors.has('name')"
                                           class="help text-danger">
                                         {{ errors.first('name') }}
@@ -104,83 +157,62 @@
                                     <option value="false">no</option>
                                     <option value="true">yes</option>
                                 </select>
-                            </div>
+                                </div>
                             </div>
                             <div class="col">
                                 <div v-if="type==='course'">
-                                <label for="mod_of_training">Mode Of Training</label>
-                                <select id="mod_of_training" v-model="mod_of_training" name="mod_of_training" class="form-control" >
-                                    <option value="online">Online</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                        <!--  -->
-                        <div v-if="type==='course'">
-                        <div class="row">
-                            <div class="col">
-                            <label for="certificationlink">Certification Link<sup style="color:red">*</sup></label>
-                            <input type="text" v-model="certificationlink" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" id="certificationlink" name="description" class="form-control">
-                             <span v-show="errors.has('certificationlink')"
-                                      class="help text-danger">
-                                    {{ errors.first('certificationlink') }}
-                             </span>
-                             </div>
-                             <div class="col">
-                             </div>
-                             <div class="col">
-                             </div>
-                        </div>
-                        </div>
-                        <!--  -->
-                    </div>
-                </div>
-                <div v-if="type==='course' || type==='bundle'" >
-                <hr>
-                <div class="card card-default">
-                    <div class="card-header">University Info</div>
-                    <div class="card-body">  
-                        <div class="row">
-                            <div class="col">
-                                <label for="university_category">Course Category</label>
-                                <select id="university_category" v-model="university_category" name="university_category" class="form-control" >
-                                <option value="acadgild">Acadgild</option>
-                                <option value="bdu">BDU</option>
-                                <option value="pu">PU</option>
-                                <option value="nmims">NMIMS</option>
-                                <option value="aima">AIMA</option>
-                               </select>
-                            </div>
-                            <div class="col">
-                                <label for="certification_category">Certification Category</label>
-                                 <div v-if="university_category ==='acadgild'">
-                                    <select id="certification_category" v-model="certification_category" name="certification_category" class="form-control" >
-                                    <option value="certification">Certification</option>
-                                    <option value="nonocertification">Non Certification</option>
-                                    </select>
+                                    <label for="certificationlink">Certification Link<sup style="color:red">*</sup></label>
+                                    <input type="text" v-model="certificationlink" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" id="certificationlink" name="description" class="form-control">
+                                     <span v-show="errors.has('certificationlink')"
+                                              class="help text-danger">
+                                            {{ errors.first('certificationlink') }}
+                                     </span>    
                                  </div>
-                                 <div v-else-if="university_category ===''">
-                                    <select id="certification_category" v-model="certification_category" name="certification_category" class="form-control" >
-                                    <option value="certification">Certification</option>
-                                    <option value="nonocertification">Non Certification</option>
-                                    <option value="diploma">Diploma</option>
-                                    <option value="masters">Masters</option>
-                                    </select>
-                                 </div>
-                                 <div v-else>
-                                    <select id="certification_category" v-model="certification_category" name="certification_category" class="form-control" >
-                                    <option value="diploma">Diploma</option>
-                                    <option value="masters">Masters</option>
-                                    </select>
-                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>
-                </div> 
                 </div>
-                <div v-if="type==='course'">
+                <!-- metainfo section -->
+                <div v-if="type==='parent' || type==='group' || type==='course' || type==='bundle'">
+                    <hr>
+                    <div class="card card-default">
+                    <div class="card-header">Metadata Info.</div>    
+                    <div class="card-body">
+                        <div class="row">
+                           <div class="col">
+                                <label for="metadata">Metadata Name</label>
+                                 <input v-model="meta_name"  type="text" id="metadata" name="metadata" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="metadata">Metadata Description</label>
+                                 <input v-model="meta_description"  type="text" id="metadata_desc" name="metadata" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="h1">h1</label>
+                                 <input v-model="meta_h1"  type="text" id="h1" name="h1" class="form-control">
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="h2">h2</label>
+                                 <input v-model="meta_h2"  type="text" id="h2" name="h2" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="title">Title</label>
+                                 <input v-model="meta_title"  type="text" id="title" name="title" class="form-control">
+                            </div>
+                            <div class="col">
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!-- end of metainfo section -->
+                
+                <div v-if="type==='course' || type==='bundle'">
                 <hr>
                  <div class="card card-default">
                     <div class="card-header">Display Info</div>
@@ -204,16 +236,15 @@
                             </div>
                             <div class="col">
                                 <label for="learner_increament">Learner Increament<sup style="color:red">*</sup></label>
-                                 <vue-slider v-model="learner_increament"></vue-slider>
+                                 <vue-slider :min=3 :max=5 :interval=0.1 v-model="learner_increament"></vue-slider>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <label for="rating_increament">Rating Increament<sup style="color:red">*</sup></label>
-                                 <vue-slider v-model="rating_increament"></vue-slider>
+                                 <vue-slider :min=3 :max=5 :interval=0.1 v-model="rating_increament"></vue-slider>
                             </div>
-                            <div class="col">
-                                
+                            <div class="col">   
                             </div>
                             <div class="col">
                             </div>
@@ -221,6 +252,135 @@
                     </div>
                 </div>
                 </div>
+                
+                <div v-if="type==='course' || type==='bundle'">
+                    <hr>
+                    <div class="card card-default">
+                        <div class="card-header">Course Plan
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="totalsession">Total Session<sup style="color:red">*</sup></label>
+                                         
+                                     <input v-model="totalsession" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="totalsession" name="totalsession" class="form-control">
+                                      <span v-show="errors.has('totalsession')"
+                                              class="help text-danger">
+                                            {{ errors.first('totalsession') }}
+                                      </span>
+
+                                </div>
+                                <div class="col">
+                                    <label for="sessionduration">Session Duration<sup style="color:red">*</sup></label>
+                                        
+                                     <input v-model="sessionduration" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="sessionduration" name="sessionduration" class="form-control">
+                                      <span v-show="errors.has('name')"
+                                              class="help text-danger">
+                                            {{ errors.first('sessionduration') }}
+                                      </span>
+
+                                </div>
+                                <div class="col"></div>
+                                <div class=""></div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="codinghours">Coding Hours<sup style="color:red">*</sup></label>
+                                        
+                                     <input v-model="codinghours" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="codinghours" name="codinghours" class="form-control">
+                                      <span v-show="errors.has('name')"
+                                              class="help text-danger">
+                                            {{ errors.first('codinghours') }}
+                                      </span>
+
+                                </div>
+                                <div class="col">
+                                    <label for="projectcount">Project Count<sup style="color:red">*</sup></label>
+                                        
+                                     <input v-model="projectcount" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="projectcount" name="projectcount" class="form-control">
+                                      <span v-show="errors.has('name')"
+                                              class="help text-danger">
+                                            {{ errors.first('projectcount') }}
+                                      </span>
+
+                                </div>
+                                <div class="col">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                 <div v-if="type==='course' || type==='bundle'">
+                     <hr>
+                     <div class="card card-default">
+                           <div class="card-header">
+                              <div class="row">
+                                  <div class="col-md-5">
+                                    <h4>Faq</h4>
+                                  </div>
+                                  <div class="col-md-5">
+                                  </div>
+                                  <div class="col">
+                                     <button class="btn btn-primary" @click="addFaqRow()">Add Row</button>
+                                  </div>
+                              </div>
+                               
+                           </div>
+
+                           <div class="card-body">
+                                  <faq @oneFaq="addFaq" v-for="n in faqrange" :key="n"></faq>
+                           </div>
+                     </div>
+                 </div>
+                
+                 <div v-if="type==='course' || type==='bundle'">
+                     <hr>
+                     <div class="card card-default">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h4>Review</h4>
+                                </div>
+                                <div class="col-md-5">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" @click="addReviewRow()">Add Row</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!--  -->
+                            <review @oneReview="addReview" v-for="n in reviewrange" :key="n"></review>
+                        </div>
+                     </div>
+                </div>
+                <!--  -->
+               
+                <div v-if="type==='course' || type==='bundle'">
+                     <hr>
+                     <div class="card card-default">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <h4>Syllabus</h4>
+                                </div>
+                                <div class="col-md-5">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary" @click="addsyllabusrow()">Add Syllabus</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <syllabus @oneSyllabus="addSyllabus" v-for="n in syllabusrange" :key="n"></syllabus>
+                        </div>
+                     </div>
+                </div>
+                <!--  -->
                 <div v-if="type==='bundle'">
                     <hr>
                     <div class="card card-default">
@@ -229,12 +389,25 @@
                             <div class="row">
                                 <div class="col">
                                       <label for="bundlecourse">Bundle Courses</label>
-                                      <select name="bundlecourse" v-model="selected" multiple>
-                                         
-                                          <option v-for="item in course" v-bind:value="item._id" :key="item._id">
-                                            {{ item.name }}
-                                          </option>
-                                      </select>
+                                    <multiselect
+                                            class="mr-4"
+                                            v-model="selected"
+                                            placeholder="Select Course"
+                                            :options="course"
+                                            :multiple="true"
+                                            label="name" track-by="name"
+                                            v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course">
+                                        <template slot="singleLabel" slot-scope="{ option }">
+                                            <span :class="{inactiveOption: !option.active}">
+                                                {{ option.name }}
+                                            </span>
+                                        </template>
+                                        <template slot="option" slot-scope="props">
+                                            <span :class="{inactiveOption: !props.option.active}">
+                                                {{ props.option.name }}
+                                            </span>
+                                        </template>
+                                    </multiselect>
                                       
                                 </div>
                                 <div class="col">
@@ -260,29 +433,54 @@
 </template>
 <script>
     import vueSlider from 'vue-slider-component';
+    import faq from './faq';
+    import review from './review';
+    import syllabus from './syllabus';
     export default {
        components: {
-    vueSlider
-  },
+               vueSlider,faq,review,syllabus
+        },
        data() {
             return{
                 type: '',
-                name:'',
+                parent_course:'',
+                course_group:'',
+                certificate:'',
+                mode_of_training:'',
+                bu:'',
+                sub_bu:'',
+                region:'',
+                productname:'',
                 description:'',
                 shortname:'',
                 active:false,
                 free_course:false,
-                course_freemium:false,
-                course_degree:'',
-                course_type:'',
-                parent_course:'',
-                course_catergory:'',
-                university_category:'',
-                certification_category:'',
+                disabled_name:1,
+                course_info:'',
+                learner:'',
+                certificationlink:'',
                 selected:[],
                 course:[],
-                rating_increament:[1,5],
-                learner_increament:[1,5]
+                meta_title:'',
+                meta_h1:'',
+                meta_h2:'',
+                meta_description:'',
+                meta_name:'',
+                selected_bundle_course:[],
+                rating_increament:[3,5],
+                learner_increament:[3,5],
+                planname:'',
+                sessionduration:'',
+                totalsession:'',
+                codinghours:'',
+                projectcount:'',
+                faqQuestionAnswer:[],
+                faqrange:1,
+                reviewrange:1,
+                reviewQuestionAnswer:[],
+                syllabusrange:1,
+                allsyllabus:[]
+
 
             }
         },
@@ -301,7 +499,59 @@
             }
         },
         methods: {
-            checkForm(e) {
+            addFaqRow(){
+
+             this.faqrange++;
+
+            },
+            addFaq(data){
+                let vm = this;
+                vm.faqQuestionAnswer.push(data);
+            },
+            addReviewRow(){
+              this.reviewrange++;
+            },
+            addReview(data){
+
+              this.reviewQuestionAnswer.push(data);
+              log(this.reviewQuestionAnswer);
+
+            },
+            addSyllabus(data){
+               
+               this.allsyllabus.push(data);
+
+            },
+            addsyllabusrow(){
+               this.syllabusrange++;
+               this.learner++;
+               log("");
+            },
+            coursegroupchange(){
+               let group=this.course_group;
+               this.productname=this.productname+group+'-';
+            },
+            modetrainingchange(){
+               let mode=this.mode_of_training;
+               this.productname=this.productname+mode+'-';
+            },
+            certificatechange(){
+               let cert=this.certificate;
+               this.productname=this.productname+cert+'-';
+            },
+            regionchange(){
+               let region=this.region;
+               this.productname=this.productname+region;
+            },
+            async  checkForm(e) {
+                    let result=await this.$validator.validateAll();
+                    // log(result);
+                    var j=0;
+                    for(var i=0;i<this.selected.length;i++){
+                           this.selected_bundle_course[j]=this.selected[i]._id;
+                           j++;
+                    }       
+                    // log(this.selected_bundle_course);
                     if(this.active==="true"){
                         this.active=true;
                     }
@@ -327,22 +577,33 @@
                     "bundle_courses":this.selected
                   })
                   .then(function (response) {
-                    console.log(response);
+                    // console.log(response);
                   })
                   .catch(function (error) {
-                    console.log(error);
+                    // console.log(error);
                     
                   });
               
             },
             async typeSelection(){
+                
+                if(this.type==='course'){
+                    this.disabled_name=0;
+                }
+                if(this.type==='parent' || this.type==='category' || this.type==='bundle' || this.type==='group'){
+                    this.disabled_name=1;
+                    this.productname='';
+                    log(this.type);
+                    log(this.type);
+                }
+
                 if(this.type==='bundle' || this.type==='course' ){
                     try{
                         let response = await axios.get(window.contentUrl+"/course");
                         this.course=response.data.data;
                         
                     }catch (error){
-                        console.log("error happened ");
+                        // console.log("error happened ");
                     }
                 }
             }
