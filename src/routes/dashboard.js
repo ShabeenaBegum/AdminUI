@@ -10,6 +10,9 @@ import StudentIndex from "../pages/admin/student/index";
 import CourseCreate from "../pages/admin/course/create";
 import CourseEdit from "../pages/admin/course/edit";
 import SessionIndex from "../pages/admin/session/index";
+import WebinarCreate from "../pages/admin/webinar/create";
+import WebinarEdit from "../pages/admin/webinar/edit";
+
 
 
 let routes = [
@@ -75,7 +78,18 @@ let routes = [
                 path: 'mentor/edit/:mentor_id',
                 component: MentorEdit,
                 props: true
-            }
+            },
+            {
+                name:'management.webinar.create',
+                path: 'webinar/create',
+                component: WebinarCreate,
+            },
+            {
+                name:'management.webinar.edit',
+                path: 'webinar/edit',
+                component: WebinarEdit,
+            },
+
         ]
     }
 ];
