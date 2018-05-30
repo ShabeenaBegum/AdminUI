@@ -12,6 +12,8 @@ import CourseEdit from "../pages/admin/course/edit";
 import SessionIndex from "../pages/admin/session/index";
 import WebinarCreate from "../pages/admin/webinar/create";
 import WebinarEdit from "../pages/admin/webinar/edit";
+import WebinarIndex from "../pages/admin/webinar/index";
+
 
 
 
@@ -86,8 +88,14 @@ let routes = [
             },
             {
                 name:'management.webinar.edit',
-                path: 'webinar/edit',
+                path: 'webinar/edit/:webinar_id',
                 component: WebinarEdit,
+                props:true
+            },
+            {
+                name:'management.webinar.index',
+                path: 'webinar/index',
+                component: WebinarIndex,
             },
 
         ]

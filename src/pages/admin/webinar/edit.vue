@@ -3,30 +3,16 @@
         <div class="container justify-content-center">
             <h2>Edit Webinar</h2>
             <hr>
-            <div class="card card-default">
-                    <div class="card-header"></div>
-                    <div class="card-body">
-                       <div class="row">
-                        <div class="col"></div>
-                        <div class="col">
-                          <label for="select_webinar">Select Webinar</label>
-                              <select id="select_webinar" name="select_webinar" v-model="select_webinar" @change="webinarchange()" class="form-control" v-validate="{ required: true}" >
-                                        <option value="webinar">Webinar1</option>
-                                        <option value="webinar">Webinar2</option>
-                                        <option value="webinar">Webinar3</option>
-                                        <option value="webinar">Webinar4</option>
-                                        <option value="webinar">Webinar5</option>
-                                </select>
-                        </div>
-                        <div class="col"></div>
-                       </div>
-                    </div>
-            </div>
-            <hr>
             <form id="webinar_form" @submit.prevent="checkForm()">           
                 <div class="card card-default">
                     <div class="card-header">General Info.</div>
                     <div class="card-body">
+                      <div v-if="errors.items.length" class="alert alert-danger">
+                            <strong>Oops !!  There are some validation error</strong>
+                            <ul>
+                                <li v-for="error in errors.items" v-text="error.msg"></li>
+                            </ul>
+                        </div>
                          <div class="row">
                             <div class="col">
                                 <label for="title">Title<sup style="color:red">*</sup></label>
@@ -57,7 +43,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="date">Seminar Date</label>
-                                    <date-picker v-model="date" :config="{minDate: 'today'}"
+                                    <date-picker v-model="date" 
                                                  class="form-control form-control-sm"
                                                  v-validate="'required'"
                                                  name="start_date"
@@ -144,13 +130,13 @@
 
                            <div class="card-body">
                                   <mentorrrr @deleteMentor="deletementor" @editoneMentor="function (a, b) { editMentor( a, b) }" :one="mentors" v-for="(mentors,index) in mentorProfiles" :currentindex="index" :key="mentors.name"></mentorrrr>
-                                  <mentorrr @oneMentor="addMentor" v-for="n in mentorrange" :key="n"></mentorrr>
+                                  <mentorrr @oneMentor="addMentor" v-if="shwAddMentor"></mentorrr>
                            </div>
                      </div>
                 <hr>
                 <div class="col-sm-4"></div>
                 <div class="col-sm-8">
-                    <button id="course-update" type="submit" class="btn btn-lg btn-primary">Save</button>
+                    <button id="course-update" type="submit" class="btn btn-lg btn-success">Update webinar</button>
                 </div>
             </form>
         </div>
@@ -173,6 +159,7 @@
        components: {
                mentorrr,mentorrrr,tinymce,datePicker,geolocation
         },
+        props:['webinar_id'],
         data() {
             return{
                 
@@ -190,18 +177,47 @@
                 mentorProfiles:[],
                 mentorrange:1,
                 select_webinar:'',
-                mentorrange:0
+                mentorrange:0,
+                all_webiners:[],
+                shwAddMentor:false
             }
+        },
+        async created() {
+           let vm = this;
+           log(this.webinar_id)
+           axios.get('http://127.0.0.1:5000/get/'+this.webinar_id, {
+   
+                  })
+                  .then(function (response) {
+                    
+                    console.log(response.data.data);
+                    vm.title=response.data.data.title;
+                    vm.topic=response.data.data.topic;
+                    vm.description=response.data.data.description;
+                    vm.date=response.data.data.seminar_date;
+                    vm.start_time=response.data.data.start_time;
+                    vm.duration=response.data.data.duration;
+                    vm.category=response.data.data.category;
+                    vm.course=response.data.data.course;
+                    vm.requirement=response.data.data.requirement;
+                    vm.about_the_seminar=response.data.data.about_the_seminar;
+                    vm.mentorProfiles=response.data.data.mentor;
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    
+                  });
         },
         methods: {
             addMentorRow(){
 
-             this.mentorrange++;
+             this.shwAddMentor = true;
 
             },
             addMentor(data){
                 let vm = this;
                 vm.mentorProfiles.push(data);
+                vm.shwAddMentor = false;
             },
             editMentor(data, id){
                 let vm = this;
@@ -213,16 +229,23 @@
             },
             async webinarchange(){
               let vm = this;
-              this.mentorrange=0;
-              axios.get('http://127.0.0.1:5000/', {
+              axios.get('http://127.0.0.1:5000/get/'+this.select_webinar, {
 
                   })
                   .then(function (response) {
                     
-                    vm.title=response.data.title;
-                    vm.topic=response.data.topic;
-                    vm.mentorProfiles=response.data.mentor;
-                    console.log(vm.mentorProfiles);
+                    // console.log(response.data.data);
+                    vm.title=response.data.data.title;
+                    vm.topic=response.data.data.topic;
+                    vm.description=response.data.data.description;
+                    vm.date=response.data.data.seminar_date;
+                    vm.start_time=response.data.data.start_time;
+                    vm.duration=response.data.data.duration;
+                    vm.category=response.data.data.category;
+                    vm.course=response.data.data.course;
+                    vm.requirement=response.data.data.requirement;
+                    vm.about_the_seminar=response.data.data.about_the_seminar;
+                    vm.mentorProfiles=response.data.data.mentor;
 
                   })
                   .catch(function (error) {
@@ -231,30 +254,34 @@
                   });
             },
             async checkForm(){
-              // let result=await this.$validator.validateAll();
-              // axios.post('http://127.0.0.1:5000/add', {
-              //       "title":this.title,
-              //       "topic":this.topic,
-              //       "description":this.description,
-              //       "start_time":this.start_time,
-              //       "duration":this.duration,
-              //       "course":this.course,
-              //       "category":this.category,
-              //       "requirement":this.requirement,
-              //       "address":this.address.city,
-              //       "mentor":this.mentorProfiles,
-              //       "about_the_seminar":this.about_the_seminar,
-              //       "seminar_date":this.date
+              let result=await this.$validator.validateAll();
+              if(result && this.mentorProfiles.length){
 
-              //     })
-              //     .then(function (response) {
-              //       console.log(response);
-              //     })
-              //     .catch(function (error) {
-              //       console.log(error);
+                axios.put('http://127.0.0.1:5000/update/'+this.select_webinar, {
+                    "title":this.title,
+                    "topic":this.topic,
+                    "description":this.description,
+                    "start_time":this.start_time,
+                    "duration":this.duration,
+                    "course":this.course,
+                    "category":this.category,
+                    "requirement":this.requirement,
+                    "address":this.address.city,
+                    "mentor":this.mentorProfiles,
+                    "about_the_seminar":this.about_the_seminar,
+                    "seminar_date":this.date
+
+                  })
+                  .then(function (response) {
+                    console.log(response);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
                     
-              //     });
-              console.log(this.mentorProfiles)
+                  });
+
+              }
+              
             }
         }
     }
