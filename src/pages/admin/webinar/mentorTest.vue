@@ -23,7 +23,7 @@
     <div class="row">
             <div class="col-md">
               <label for="mentorlinkedinurl"> Mentor LinkedIn URL<sup style="color:red">*</sup></label>
-              <input v-model="profile.mentor_linkedin" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="mentor_linkedin" name="mentor_linkedin" class="form-control">
+              <input v-model="profile.mentor_linkedin" v-validate="{ required: true }" type="text" id="mentor_linkedin" name="mentor_linkedin" class="form-control">
             </div>
             <div class="col-md">
               <label for="mentorprofile"> Mentor Profile<sup style="color:red">*</sup></label>
@@ -34,6 +34,17 @@
               <input class="form-control"  v-validate="{ required: true}" id="mentor_image" name="mentor_image" type="file" @change="fileChanged">
             </div>
     </div>
+    <div class="row">
+      <div class="col">
+         <label for="mentor_cost">Event Cost<sup style="color:red">*</sup></label>
+         <input v-model="profile.mentor_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="mentor_cost" name="mentor_cost" class="form-control">
+      </div>
+      <div class="col">
+      </div>
+      <div class="col">
+      </div>
+    </div>
+    <p></p>
     <div class="row">
            <div class="col">
              <button class="btn btn-success" type="button" @click="save1" :disabled="edit === 0">Save Mentor</button>
@@ -67,6 +78,7 @@
                         mentor_designation:'',
                         mentor_linkedin:'',
                         mentor_profile:'',
+                        mentor_cost:0,
                         mentor_image:''
                     },
                     edit:1
@@ -80,8 +92,10 @@
       },
     	async save1(){
           let result=await this.$validator.validateAll();
-          if(result)
+          if(result){
              this.$emit('oneMentor',this.profile);
+             this.edit=0;
+           }
           else
              sflash('Please fill all the fields','error');
 

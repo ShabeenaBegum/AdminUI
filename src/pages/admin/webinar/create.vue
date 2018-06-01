@@ -112,12 +112,43 @@
                                 </date-picker>
                             </div>
                          </div>
+                         <div class="row">
+                            <div class="col">
+                                   <label for="url">URL<sup style="color:red">*</sup></label>
+                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control">
+                                    <span v-show="errors.has('url')"
+                                            class="help text-danger">
+                                          {{ errors.first('url') }}
+                                    </span>
+                            </div>
+                            <div class="col">
+                                   <label for="event_cost">Event Cost<sup style="color:red">*</sup></label>
+                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control">
+                                    <span v-show="errors.has('event_cost')"
+                                            class="help text-danger">
+                                          {{ errors.first('event_cost') }}
+                                    </span>
+                            </div>
+                            <div class="col">
+                                    <label for="timezone">Time Zone<sup style="color:red">*</sup></label>
+                                     <select id="timezone" name="timezone" v-model="timezone" class="form-control" v-validate="{ required: true}" >
+                                                <option disabled value="">Please select one</option>
+                                                <option value="ist">IST</option>
+                                                <option value="pst">EST</option>
+                                                <option value="est">PST</option>
+                                     </select>
+                            </div>
+                         </div>
                          <div v-if="event_type==='seminar' || event_type==='workshop'">
                           <div class="row">
                             <div class="col">
                               <div class="form-group">
                                         <label for="location">Location</label>
-                                        <geolocation id="map" v-model="city" class="form-control form-control-sm" v-validate="{ required: true}"/>
+                                        <geolocation id="city" name="city" v-model="city" class="form-control form-control-sm" v-validate="{ required: true}"/>
+                                        <span v-show="errors.has('city')"
+                                          class="help text-danger">
+                                        {{ errors.first('city') }}
+                                  </span>
                                </div>
                             </div>
                             <div class="col">
@@ -130,7 +161,7 @@
                             </div>
                             <div class="col">
                                 <label for="google_link">Google Link<sup style="color:red">*</sup></label>
-                                 <input v-model="google_link" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="google_link" name="google_link" class="form-control">
+                                 <input v-model="google_link" v-validate="{ required: true }" type="text" id="google_link" name="google_link" class="form-control">
                                   <span v-show="errors.has('google_link')"
                                           class="help text-danger">
                                         {{ errors.first('google_link') }}
@@ -142,7 +173,7 @@
                             <div class="col">
                                 <label for="about_the_event">About the {{event_type}}<sup style="color:red">*</sup></label>
                                 <tinymce id="d1"  v-model="about_the_event" v-validate="'required'"
-                                             name="About_the_seminar"
+                                             name="About_the_event"
                                              :has-error="errors.has('about_the_event')"></tinymce>
                             </div>
                          </div>
@@ -168,14 +199,22 @@
                                   <subheading @oneheading="addSubHeading" v-for="n in subrange" :key="n" :index="n"></subheading>
                            </div>
                      </div>
-               <!--  <hr>
+                <hr>
                  <div class="card card-default">
                        <div class="card-header">
                           <div class="row">
                               <div class="col-md-5">
-                                <h4>Mentor Profile</h4>
+                                <label for="mentor_search">Mentor Search<sup style="color:red">*</sup></label>
+                                 <select id="mentor_search" name="mentor_search" v-model="mentor_search" class="form-control" >
+                                            <option disabled value="">Please select one</option>
+                                            <option value="mentor1">mentor1</option>
+                                            <option value="mentor2">mentor2</option>
+                                            <option value="mentor3">mentor3</option>
+                                 </select>
                               </div>
                               <div class="col-md-5">
+                                 
+
                               </div>
                               <div class="col">
                                  <button type="button" class="btn btn-primary" @click="addMentorRow()">Add Mentor</button>
@@ -185,13 +224,13 @@
                        </div>
 
                        <div class="card-body">
-                              <mentorrr @oneMentor="addMentor" v-for="n in mentorrange" :key="n"></mentorrr>
+                              <eventmentor @oneMentor="addMentor" v-for="n in mentorrange" :key="n"></eventmentor>
                        </div>
-                 </div> -->
+                 </div>
                 <hr>
                 <div class="col-sm-4"></div>
                 <div class="col-sm-8">
-                    <button id="course-update" type="submit" class="btn btn-lg btn-primary">Save</button>
+                    <button id="webinar-create" type="submit" class="btn btn-lg btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -205,14 +244,14 @@
     });
 </script>
 <script>
-     import mentorrr from './mentorTest';
+     import eventmentor from './mentorTest';
      import subheading from './subheading';
      import tinymce from 'vue-tinymce-editor';
      import datePicker from 'vue-flatpickr-component';
      import geolocation from '@/components/geolocation';
       export default {
        components: {
-               mentorrr,tinymce,datePicker,geolocation,subheading
+               eventmentor,tinymce,datePicker,geolocation,subheading
         },
         data() {
             return{
@@ -231,10 +270,14 @@
                 address:'',
                 google_link:'',
                 about_the_event:'',
+                url:'',
+                event_cost:0,
+                timezone:'',
                 sub_heading_array:[],
                 subrange:0,
                 mentorProfiles:[],
-                mentorrange:1
+                mentor_search:'',
+                mentorrange:0
             }
         },
         methods: {
@@ -256,37 +299,50 @@
             async checkForm(){
               let result=await this.$validator.validateAll();
               // console.log(this.sub_heading_array);
+              // console.log(this.mentorProfiles);
+              // console.log(this.city.city);
               if(result && this.mentorProfiles.length){
 
-                // axios.post('http://127.0.0.1:5000/add', {
-                //     "title":this.title,
-                //     "topic":this.topic,
-                //     "description":this.description,
-                //     "start_time":this.start_time,
-                //     "duration":this.duration,
-                //     "course":this.course,
-                //     "category":this.category,
-                //     "requirement":this.requirement,
-                //     "address":this.address.city,
-                //     "mentor":this.mentorProfiles,
-                //     "about_the_seminar":this.about_the_seminar,
-                //     "seminar_date":this.date
+                axios.post('http://127.0.0.1:5000/add', {
+          
+                    "event_type":this.event_type,
+                    "event_category":this.event_category,
+                    "product_category":this.product_category,
+                    "title":this.title,
+                    "topic":this.topic,
+                    "description":this.description,
+                    "from_date":this.from_date,
+                    "from_time":this.from_time,
+                    "to_date":this.to_date,
+                    "to_time":this.to_time,
+                    "city":this.city.city,
+                    "address":this.address,
+                    "google_link":this.google_link,
+                    "about_the_event":this.about_the_event,
+                    "url":this.url,
+                    "event_cost":this.event_cost,
+                    "timezone":this.timezone,
+                    "sub_heading_array":this.sub_heading_array,
+                    "mentor_array":this.mentorProfiles,
+                    "status":"ready_for_producton"
 
-                //   })
-                //   .then(function (response) {
-                //     if(response.data.message==='valid'){
-                //        sflash('Webinar created');
-                //     }
-                //     else if(response.data.message==='invalid'){
-                //       sflash('Please try again','error');
-                //     }
-                //   })
-                //   .catch(function (error) {
-                //     console.log(error);
+                  })
+                  .then(function (response) {
+                    if(response.data.message==='valid'){
+                       sflash('Webinar created');
+                    }
+                    else if(response.data.message==='invalid'){
+                      sflash('Please try again','error');
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
                     
-                //   });
+                  });
 
               }
+              else if(this.mentorProfiles.length==0)
+                sflash('Please enter mentors','error');
               else
                 sflash('Please fill up all the fields','error');
             }

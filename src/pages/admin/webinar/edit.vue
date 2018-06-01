@@ -14,6 +14,33 @@
                             </ul>
                         </div>
                          <div class="row">
+                          <div class="col">
+                             <label for="event_type">Event type<sup style="color:red">*</sup></label>
+                             <select id="event_type" name="event_type" v-model="event_type" class="form-control" v-validate="{ required: true}" >
+                                        <option disabled value="">Please select one</option>
+                                        <option value="webinar">Webinar</option>
+                                        <option value="seminar">Seminar</option>
+                                        <option value="workshop">Workshop</option>
+                             </select>
+                          </div>
+                          <div class="col">
+                            <label for="event_category">Event category<sup style="color:red">*</sup></label>
+                             <select id="event_category" name="event_category" v-model="event_category" class="form-control" v-validate="{ required: true}" >
+                                        <option disabled value="">Please select one</option>
+                                        <option value="technology">Technology</option>
+                                        <option value="career">Career</option>
+                             </select>
+                          </div>
+                          <div class="col">
+                            <label for="product_category">Product category<sup style="color:red">*</sup></label>
+                             <select id="product_category" name="product_category" v-model="product_category" class="form-control" v-validate="{ required: true}" >
+                                        <option disabled value="">Please select one</option>
+                                        <option value="bigdata">Big Data</option>
+                                        <option value="datascience">Data Science</option>
+                             </select>
+                          </div>
+                        </div>
+                         <div class="row">
                             <div class="col">
                                 <label for="title">Title<sup style="color:red">*</sup></label>
                                  <input v-model="title" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="title" name="title" class="form-control">
@@ -42,97 +69,144 @@
                          <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="date">Seminar Date</label>
-                                    <date-picker v-model="date" 
+                                    <label for="from_date">From Date</label>
+                                    <date-picker v-model="from_date" 
                                                  class="form-control form-control-sm"
                                                  v-validate="'required'"
-                                                 name="start_date"
+                                                 name="from_date"
                                                  data-vv-value-path="innerValue"
-                                                 :has-error="errors.has('date')">
+                                                 :has-error="errors.has('from_date')">
                                     </date-picker>
                                 </div>
                             </div>
                             <div class="col">
-                                <label for="start_time">Start Time</label>
-                                <date-picker v-model="start_time"
+                                <label for="from_time">From Time</label>
+                                <date-picker v-model="from_time"
                                              :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
                                              class="form-control form-control-sm"
                                              v-validate="'required'"
+                                             name="from_time"
                                              :has-error="errors.has('selectedDay.day')">
                                 </date-picker>
                             </div>
                             <div class="col">
-                                <label for="duration">Duration</label>
-                                <select id="duration" name="duration" v-model="duration"  class="form-control" v-validate="{ required: true}" >
-                                        <option value="30">30 min.</option>
-                                        <option value="1.30">1.30 hours.</option>
-                                        <option value="2.00">2.00 hours</option>
-                                        <option value="2.30">2.30 hours</option>
-                                        <option value="3.00">3.00 hours</option>
-                                </select>
+                                <div class="form-group">
+                                    <label for="to_date">To Date</label>
+                                    <date-picker v-model="to_date" 
+                                                 class="form-control form-control-sm"
+                                                 v-validate="'required'"
+                                                 name="to_date"
+                                                 data-vv-value-path="innerValue"
+                                                 :has-error="errors.has('to_date')">
+                                    </date-picker>
+                                </div>
                             </div>
-
+                            <div class="col">
+                                <label for="to_time">To Time</label>
+                                <date-picker v-model="to_time"
+                                             :config="{enableTime: true,noCalendar: true,dateFormat: 'H:i'}"
+                                             class="form-control form-control-sm"
+                                             v-validate="'required'"
+                                             name="to_time"
+                                             :has-error="errors.has('selectedDay.day')">
+                                </date-picker>
+                            </div>
                          </div>
                          <div class="row">
                             <div class="col">
-                                <label for="course">Course</label>
-                                <select id="course" name="course" v-model="course" class="form-control" v-validate="{ required: true}">
-                                        <option value="bigdata">BigData</option>
-                                        <option value="datascience">Data Science</option>
-                                </select>
+                                   <label for="url">URL<sup style="color:red">*</sup></label>
+                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control">
+                                    <span v-show="errors.has('url')"
+                                            class="help text-danger">
+                                          {{ errors.first('url') }}
+                                    </span>
                             </div>
                             <div class="col">
-                                <label for="category">Category</label>
-                                <select id="category" name="category" v-model="category" class="form-control" v-validate="{ required: true}" >
-                                        <option value="online">Online</option>
-                                        <option value="offline">Offline</option>
-                                </select>
-                                
+                                   <label for="event_cost">Event Cost<sup style="color:red">*</sup></label>
+                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control">
+                                    <span v-show="errors.has('event_cost')"
+                                            class="help text-danger">
+                                          {{ errors.first('event_cost') }}
+                                    </span>
                             </div>
                             <div class="col">
-                               <div v-if="category==='offline'">     
-                                    <div class="form-group">
+                                    <label for="timezone">Time Zone<sup style="color:red">*</sup></label>
+                                     <select id="timezone" name="timezone" v-model="timezone" class="form-control" v-validate="{ required: true}" >
+                                                <option disabled value="">Please select one</option>
+                                                <option value="ist">IST</option>
+                                                <option value="pst">EST</option>
+                                                <option value="est">PST</option>
+                                     </select>
+                            </div>
+                         </div>
+                         <div v-if="event_type==='seminar' || event_type==='workshop'">
+                          <div class="row">
+                            <div class="col">
+                              <div class="form-group">
                                         <label for="location">Location</label>
-                                        <geolocation id="map" v-model="address" class="form-control form-control-sm" v-validate="{ required: true}"/>
-                                    </div>
+                                        <geolocation id="city" name="city" v-model="city" class="form-control form-control-sm" v-validate="{ required: true}"/>
+                                        <span v-show="errors.has('city')"
+                                          class="help text-danger">
+                                        {{ errors.first('city') }}
+                                  </span>
                                </div>
                             </div>
-                         </div>
-                         <div class="row">
                             <div class="col">
-                                <label for="">About the seminer<sup style="color:red">*</sup></label>
-                                <tinymce id="d1"  v-model="about_the_seminar"></tinymce>
+                                 <label for="address">Address<sup style="color:red">*</sup></label>
+                                 <input v-model="address" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="address" name="address" class="form-control">
+                                  <span v-show="errors.has('address')"
+                                          class="help text-danger">
+                                        {{ errors.first('address') }}
+                                  </span>
                             </div>
-                         </div>
-                         <div class="row">
                             <div class="col">
-                                <label for="">What do you need to bring?<sup style="color:red">*</sup></label>
-                                <tinymce id="d2" v-model="requirement"></tinymce>
+                                <label for="google_link">Google Link<sup style="color:red">*</sup></label>
+                                 <input v-model="google_link" v-validate="{ required: true }" type="text" id="google_link" name="google_link" class="form-control">
+                                  <span v-show="errors.has('google_link')"
+                                          class="help text-danger">
+                                        {{ errors.first('google_link') }}
+                                  </span>
+                            </div>
+                          </div>
+                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="">About the {{event_type}}<sup style="color:red">*</sup></label>
+                                <tinymce id="d1"  v-model="about_the_event"></tinymce>
                             </div>
                          </div>
                     </div>
                 </div>
                 <hr>
-                     <div class="card card-default">
-                           <div class="card-header">
-                              <div class="row">
-                                  <div class="col-md-5">
-                                    <h4>Mentor Profile</h4>
-                                  </div>
-                                  <div class="col-md-5">
-                                  </div>
-                                  <div class="col">
-                                     <button type="button" class="btn btn-primary" @click="addMentorRow()">Add Mentor</button>
-                                  </div>
+                 <div class="card card-default">
+                       <div class="card-header">
+                          <h4>Sub Heading</h4>
+                       </div>
+                       <div class="card-body">
+                          <editsubheading @editHeading="function (a, b) { editsubHeadingArray( a, b) }" :one="subheading" v-for="(subheading,index) in sub_heading_array" :key="index" :index="index" :currentindex="index"></editsubheading>
+                       </div>
+                </div>
+                <hr>
+                 <div class="card card-default">
+                       <div class="card-header">
+                          <div class="row">
+                              <div class="col-md-5">
+                                <h4>Mentor Profile</h4>
                               </div>
-                               
-                           </div>
+                              <div class="col-md-5">
+                              </div>
+                              <div class="col">
+                                 <button type="button" class="btn btn-primary" @click="addMentorRow()">Add Mentor</button>
+                              </div>
+                          </div>
+                           
+                       </div>
 
-                           <div class="card-body">
-                                  <mentorrrr @deleteMentor="deletementor" @editoneMentor="function (a, b) { editMentor( a, b) }" :one="mentors" v-for="(mentors,index) in mentorProfiles" :currentindex="index" :key="mentors.name"></mentorrrr>
-                                  <mentorrr @oneMentor="addMentor" v-if="shwAddMentor"></mentorrr>
-                           </div>
-                     </div>
+                       <div class="card-body">
+                              <updateeventmentor @deleteMentor="deletementor" @editoneMentor="function (a, b) { editMentor( a, b) }" :one="mentors" v-for="(mentors,index) in mentor_array" :currentindex="index" :key="mentors.name"></updateeventmentor>
+                              <eventmentor @oneMentor="addMentor" v-if="shwAddMentor"></eventmentor>
+                       </div>
+                 </div>
                 <hr>
                 <div class="col-sm-4"></div>
                 <div class="col-sm-8">
@@ -150,32 +224,44 @@
     });
 </script>
 <script>
-     import mentorrrr from './mentoredit';
-     import mentorrr from './mentorTest';
+     import updateeventmentor from './mentoredit';
+     import eventmentor from './mentorTest';
+     import editsubheading from './editsubheading';
      import tinymce from 'vue-tinymce-editor';
      import datePicker from 'vue-flatpickr-component';
      import geolocation from '@/components/geolocation';
       export default {
        components: {
-               mentorrr,mentorrrr,tinymce,datePicker,geolocation
+               eventmentor,updateeventmentor,tinymce,datePicker,geolocation,editsubheading
         },
         props:['webinar_id'],
         data() {
             return{
-                
+
+                event_type:'',
+                event_category:'',
+                product_category:'',
                 title:'',
                 topic:'',
                 description:'',
-                date:'',
-                start_time:'',
-                duration:'',
-                category:'',
-                course:'',
+                from_date:'',
+                from_time:'',
+                to_date:'',
+                to_time:'',
+                city:'',
                 address:'',
-                requirement:'',
-                about_the_seminar:'',
-                mentorProfiles:[],
-                mentorrange:1,
+                google_link:'',
+                about_the_event:'',
+                url:'',
+                event_cost:0,
+                timezone:'',
+                sub_heading_array:[],
+                subrange:0,
+                mentor_array:[],
+                mentor_search:'',
+                mentorrange:0,
+
+                ///////////////////////////
                 select_webinar:'',
                 mentorrange:0,
                 all_webiners:[],
@@ -184,24 +270,34 @@
         },
         async created() {
            let vm = this;
-           log(this.webinar_id)
+           // log(this.webinar_id)
            axios.get('http://127.0.0.1:5000/get/'+this.webinar_id, {
    
                   })
                   .then(function (response) {
                     
-                    console.log(response.data.data);
-                    vm.title=response.data.data.title;
-                    vm.topic=response.data.data.topic;
-                    vm.description=response.data.data.description;
-                    vm.date=response.data.data.seminar_date;
-                    vm.start_time=response.data.data.start_time;
-                    vm.duration=response.data.data.duration;
-                    vm.category=response.data.data.category;
-                    vm.course=response.data.data.course;
-                    vm.requirement=response.data.data.requirement;
-                    vm.about_the_seminar=response.data.data.about_the_seminar;
-                    vm.mentorProfiles=response.data.data.mentor;
+                    // console.log(response.data.data);
+                    vm.about_the_event=response.data.data.about_the_event
+                    vm.address=response.data.data.address
+                    vm.city=response.data.data.city
+                    vm.description=response.data.data.description
+                    vm.event_category=response.data.data.event_category
+                    vm.event_cost=response.data.data.event_cost
+                    vm.event_type=response.data.data.event_type
+                    vm.from_date=response.data.data.from_date
+                    vm.from_time=response.data.data.from_time
+                    vm.google_link=response.data.data.google_link
+                    vm.mentor_array=response.data.data.mentor_array
+                    vm.product_category=response.data.data.product_category
+                    vm.status=response.data.data.status
+                    vm.sub_heading_array=response.data.data.sub_heading_array
+                    vm.timezone=response.data.data.timezone
+                    vm.title=response.data.data.title
+                    vm.to_date=response.data.data.to_date
+                    vm.to_time=response.data.data.to_time
+                    vm.topic=response.data.data.topic
+                    vm.url=response.data.data.url
+                    // console.log(vm.sub_heading_array);
                   })
                   .catch(function (error) {
                     console.log(error);
@@ -222,63 +318,44 @@
             editMentor(data, id){
                 let vm = this;
                 // vm.mentorProfiles.push(data);
-                this.mentorProfiles[id]=data;
+                log(data);
+                log(id);
+                // this.mentorProfiles[id]=data;
             },
             deletementor(index){
                 this.mentorProfiles.splice(index, 1);
             },
-            async webinarchange(){
-              let vm = this;
-              axios.get('http://127.0.0.1:5000/get/'+this.select_webinar, {
-
-                  })
-                  .then(function (response) {
-                    
-                    // console.log(response.data.data);
-                    vm.title=response.data.data.title;
-                    vm.topic=response.data.data.topic;
-                    vm.description=response.data.data.description;
-                    vm.date=response.data.data.seminar_date;
-                    vm.start_time=response.data.data.start_time;
-                    vm.duration=response.data.data.duration;
-                    vm.category=response.data.data.category;
-                    vm.course=response.data.data.course;
-                    vm.requirement=response.data.data.requirement;
-                    vm.about_the_seminar=response.data.data.about_the_seminar;
-                    vm.mentorProfiles=response.data.data.mentor;
-
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                    
-                  });
+            editsubHeadingArray (data,id){
+                let vm = this;
+                // vm.mentorProfiles.push(data);
+                this.sub_heading_array[id]=data;
             },
             async checkForm(){
               let result=await this.$validator.validateAll();
               if(result && this.mentorProfiles.length){
 
-                axios.put('http://127.0.0.1:5000/update/'+this.select_webinar, {
-                    "title":this.title,
-                    "topic":this.topic,
-                    "description":this.description,
-                    "start_time":this.start_time,
-                    "duration":this.duration,
-                    "course":this.course,
-                    "category":this.category,
-                    "requirement":this.requirement,
-                    "address":this.address.city,
-                    "mentor":this.mentorProfiles,
-                    "about_the_seminar":this.about_the_seminar,
-                    "seminar_date":this.date
+                // axios.put('http://127.0.0.1:5000/update/'+this.select_webinar, {
+                //     "title":this.title,
+                //     "topic":this.topic,
+                //     "description":this.description,
+                //     "start_time":this.start_time,
+                //     "duration":this.duration,
+                //     "course":this.course,
+                //     "category":this.category,
+                //     "requirement":this.requirement,
+                //     "address":this.address.city,
+                //     "mentor":this.mentorProfiles,
+                //     "about_the_seminar":this.about_the_seminar,
+                //     "seminar_date":this.date
 
-                  })
-                  .then(function (response) {
-                    console.log(response);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
+                //   })
+                //   .then(function (response) {
+                //     console.log(response);
+                //   })
+                //   .catch(function (error) {
+                //     console.log(error);
                     
-                  });
+                //   });
 
               }
               

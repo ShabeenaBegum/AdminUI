@@ -5,16 +5,21 @@ export default {
             key: "title"
         },
         {
-            name: "topic",
-            key: "topic"
+            name: "Product",
+            key: "product_category"
         },
         {
             name: "category",
-            key: "category"
+            key: "event_category"
         },
         {
-            name: "course",
-            key: "course"
+            name: "Cost",
+            key: "event_cost"
+        },
+        
+        {
+            name: "status",
+            key: "status"
         },
 
         {
