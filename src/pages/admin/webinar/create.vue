@@ -267,6 +267,7 @@
                 to_date:'',
                 to_time:'',
                 city:'',
+                cityname:'',
                 address:'',
                 google_link:'',
                 about_the_event:'',
@@ -298,47 +299,53 @@
             },
             async checkForm(){
               let result=await this.$validator.validateAll();
-              // console.log(this.sub_heading_array);
-              // console.log(this.mentorProfiles);
-              // console.log(this.city.city);
+              if(this.city===''){
+                this.cityname='';
+              }
+              else
+              {
+                this.cityname=this.city.city;
+              }
+              console.log(this.cityname)
               if(result && this.mentorProfiles.length){
 
-                axios.post('http://127.0.0.1:5000/add', {
+                // axios.post('http://127.0.0.1:5000/add', {
           
-                    "event_type":this.event_type,
-                    "event_category":this.event_category,
-                    "product_category":this.product_category,
-                    "title":this.title,
-                    "topic":this.topic,
-                    "description":this.description,
-                    "from_date":this.from_date,
-                    "from_time":this.from_time,
-                    "to_date":this.to_date,
-                    "to_time":this.to_time,
-                    "city":this.city.city,
-                    "address":this.address,
-                    "google_link":this.google_link,
-                    "about_the_event":this.about_the_event,
-                    "url":this.url,
-                    "event_cost":this.event_cost,
-                    "timezone":this.timezone,
-                    "sub_heading_array":this.sub_heading_array,
-                    "mentor_array":this.mentorProfiles,
-                    "status":"ready_for_producton"
+                //     "event_type":this.event_type,
+                //     "event_category":this.event_category,
+                //     "product_category":this.product_category,
+                //     "title":this.title,
+                //     "topic":this.topic,
+                //     "description":this.description,
+                //     "from_date":this.from_date,
+                //     "from_time":this.from_time,
+                //     "to_date":this.to_date,
+                //     "to_time":this.to_time,
+                //     "city":this.cityname,
+                //     "address":this.address,
+                //     "google_link":this.google_link,
+                //     "about_the_event":this.about_the_event,
+                //     "url":this.url,
+                //     "event_cost":this.event_cost,
+                //     "timezone":this.timezone,
+                //     "sub_heading_array":this.sub_heading_array,
+                //     "mentor_array":this.mentorProfiles,
+                //     "status":"ready_for_producton"
 
-                  })
-                  .then(function (response) {
-                    if(response.data.message==='valid'){
-                       sflash('Webinar created');
-                    }
-                    else if(response.data.message==='invalid'){
-                      sflash('Please try again','error');
-                    }
-                  })
-                  .catch(function (error) {
-                    console.log(error);
+                //   })
+                //   .then(function (response) {
+                //     if(response.data.message==='valid'){
+                //        sflash('Webinar created');
+                //     }
+                //     else if(response.data.message==='invalid'){
+                //       sflash('Please try again','error');
+                //     }
+                //   })
+                //   .catch(function (error) {
+                //     console.log(error);
                     
-                  });
+                //   });
+                $router.push({ name: 'management.webinar.index'})
 
               }
               else if(this.mentorProfiles.length==0)

@@ -21,12 +21,10 @@
           </div>
           <div class="row">
             <div class="col">
-                 <!-- <tinymce :id="'sp_sp' + index"  v-model="profile.descripion" v-validate="'required'"
-                 name="description"
-                 :has-error="errors.has('description')"></tinymce> -->
                  <tinymce :id="'sp_sp' + index"  v-model="profile.descripion" v-validate="'required'"
                  name="description"
                  :has-error="errors.has('description')"></tinymce>
+                
             </div>
             
           </div>
@@ -62,7 +60,7 @@
 <script>
  import tinymce from 'vue-tinymce-editor';
  export default {
-  name:"subheading",
+  name:"editsubheading",
   props: ['index','one','currentindex'],
   components: {
             tinymce
@@ -79,7 +77,6 @@
                         descripion:this.one.descripion
                        
                     },
-                    content:this.one.descripion,
                     edit:1
                      
 

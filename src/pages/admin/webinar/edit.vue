@@ -16,7 +16,7 @@
                          <div class="row">
                           <div class="col">
                              <label for="event_type">Event type<sup style="color:red">*</sup></label>
-                             <select id="event_type" name="event_type" v-model="event_type" class="form-control" v-validate="{ required: true}" >
+                             <select id="event_type" name="event_type" v-model="event_type" class="form-control" v-validate="{ required: true}" :disabled="status==='completed'">
                                         <option disabled value="">Please select one</option>
                                         <option value="webinar">Webinar</option>
                                         <option value="seminar">Seminar</option>
@@ -25,7 +25,7 @@
                           </div>
                           <div class="col">
                             <label for="event_category">Event category<sup style="color:red">*</sup></label>
-                             <select id="event_category" name="event_category" v-model="event_category" class="form-control" v-validate="{ required: true}" >
+                             <select id="event_category" name="event_category" v-model="event_category" class="form-control" v-validate="{ required: true}" :disabled="status==='completed'">
                                         <option disabled value="">Please select one</option>
                                         <option value="technology">Technology</option>
                                         <option value="career">Career</option>
@@ -33,7 +33,7 @@
                           </div>
                           <div class="col">
                             <label for="product_category">Product category<sup style="color:red">*</sup></label>
-                             <select id="product_category" name="product_category" v-model="product_category" class="form-control" v-validate="{ required: true}" >
+                             <select id="product_category" name="product_category" v-model="product_category" class="form-control" v-validate="{ required: true}" :disabled="status==='completed'">
                                         <option disabled value="">Please select one</option>
                                         <option value="bigdata">Big Data</option>
                                         <option value="datascience">Data Science</option>
@@ -43,7 +43,7 @@
                          <div class="row">
                             <div class="col">
                                 <label for="title">Title<sup style="color:red">*</sup></label>
-                                 <input v-model="title" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="title" name="title" class="form-control">
+                                 <input v-model="title" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="title" name="title" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('title')"
                                           class="help text-danger">
                                         {{ errors.first('title') }}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col">
                                 <label for="topic">Topic<sup style="color:red">*</sup></label>
-                                 <input v-model="topic" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="topic" name="topic" class="form-control">
+                                 <input v-model="topic" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="topic" name="topic" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('topic')"
                                           class="help text-danger">
                                         {{ errors.first('topic') }}
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col">
                                <label for="descrption">Descrption<sup style="color:red">*</sup></label>
-                                 <input v-model="description" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="descrption" name="descrption" class="form-control">
+                                 <input v-model="description" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="descrption" name="descrption" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('descrption')"
                                           class="help text-danger">
                                         {{ errors.first('descrption') }}
@@ -115,7 +115,7 @@
                          <div class="row">
                             <div class="col">
                                    <label for="url">URL<sup style="color:red">*</sup></label>
-                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control">
+                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control" :disabled="status==='completed'">
                                     <span v-show="errors.has('url')"
                                             class="help text-danger">
                                           {{ errors.first('url') }}
@@ -123,7 +123,7 @@
                             </div>
                             <div class="col">
                                    <label for="event_cost">Event Cost<sup style="color:red">*</sup></label>
-                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control">
+                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control" :disabled="status==='completed'">
                                     <span v-show="errors.has('event_cost')"
                                             class="help text-danger">
                                           {{ errors.first('event_cost') }}
@@ -131,7 +131,7 @@
                             </div>
                             <div class="col">
                                     <label for="timezone">Time Zone<sup style="color:red">*</sup></label>
-                                     <select id="timezone" name="timezone" v-model="timezone" class="form-control" v-validate="{ required: true}" >
+                                     <select id="timezone" name="timezone" v-model="timezone" class="form-control" v-validate="{ required: true}" :disabled="status==='completed'">
                                                 <option disabled value="">Please select one</option>
                                                 <option value="ist">IST</option>
                                                 <option value="pst">EST</option>
@@ -144,7 +144,7 @@
                             <div class="col">
                               <div class="form-group">
                                         <label for="location">Location</label>
-                                        <geolocation id="city" name="city" v-model="city" class="form-control form-control-sm" v-validate="{ required: true}"/>
+                                        <geolocation id="city" name="city" v-model="city" class="form-control form-control-sm" v-validate="{ required: true}" :disabled="status==='completed'"/>
                                         <span v-show="errors.has('city')"
                                           class="help text-danger">
                                         {{ errors.first('city') }}
@@ -153,7 +153,7 @@
                             </div>
                             <div class="col">
                                  <label for="address">Address<sup style="color:red">*</sup></label>
-                                 <input v-model="address" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="address" name="address" class="form-control">
+                                 <input v-model="address" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="address" name="address" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('address')"
                                           class="help text-danger">
                                         {{ errors.first('address') }}
@@ -161,7 +161,7 @@
                             </div>
                             <div class="col">
                                 <label for="google_link">Google Link<sup style="color:red">*</sup></label>
-                                 <input v-model="google_link" v-validate="{ required: true }" type="text" id="google_link" name="google_link" class="form-control">
+                                 <input v-model="google_link" v-validate="{ required: true }" type="text" id="google_link" name="google_link" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('google_link')"
                                           class="help text-danger">
                                         {{ errors.first('google_link') }}
@@ -206,6 +206,33 @@
                               <updateeventmentor @deleteMentor="deletementor" @editoneMentor="function (a, b) { editMentor( a, b) }" :one="mentors" v-for="(mentors,index) in mentor_array" :currentindex="index" :key="mentors.name"></updateeventmentor>
                               <eventmentor @oneMentor="addMentor" v-if="shwAddMentor"></eventmentor>
                        </div>
+                 </div>
+                 <hr>
+                 <div class="card card-default">
+                  <div class="card-header">
+                    <h4>Extra Info.</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <label for="status">Status</label>
+                             <select id="status" name="status" v-model="status" class="form-control">
+                                        <option disabled value="">Please select one</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="ongoing">Ongoing</option>
+                                        <option value="ready_for_producton">ReadyForProduction</option>
+                                        <option value="canceled">Canceled</option>
+
+                             </select>
+                      </div>
+                      <div class="col">
+                      </div>
+                      <div class="col">
+                        <label for="video_url">Video Url</label>
+                         <input v-model="video_url" type="text" id="video_url" name="video_url" class="form-control"  :disabled="status==='ongoing' || status==='ready_for_producton' || status==='canceled'">
+                      </div>
+                    </div>
+                  </div>
                  </div>
                 <hr>
                 <div class="col-sm-4"></div>
@@ -260,9 +287,9 @@
                 mentor_array:[],
                 mentor_search:'',
                 mentorrange:0,
-
-                ///////////////////////////
-                select_webinar:'',
+                status:'',
+                cityname:'',
+                video_url:'',
                 mentorrange:0,
                 all_webiners:[],
                 shwAddMentor:false
@@ -312,52 +339,86 @@
             },
             addMentor(data){
                 let vm = this;
-                vm.mentorProfiles.push(data);
+                vm.mentor_array.push(data);
                 vm.shwAddMentor = false;
             },
             editMentor(data, id){
-                let vm = this;
-                // vm.mentorProfiles.push(data);
-                log(data);
-                log(id);
-                // this.mentorProfiles[id]=data;
+
+                this.mentor_array[id]=data;
             },
             deletementor(index){
-                this.mentorProfiles.splice(index, 1);
+                this.mentor_array.splice(index, 1);
             },
             editsubHeadingArray (data,id){
-                let vm = this;
-                // vm.mentorProfiles.push(data);
+                
                 this.sub_heading_array[id]=data;
             },
             async checkForm(){
               let result=await this.$validator.validateAll();
-              if(result && this.mentorProfiles.length){
+              if(this.city===''){
+                this.cityname='';
+              }
+              else
+              {
+                this.cityname=this.city.city;
+              }
+              var event_from_date = new Date(this.from_date); //dd-mm-YYYY
+              var event_to_date = new Date(this.to_date); //dd-mm-YYYY
+              var today = new Date();
+              var date_validity;
+              if(event_from_date >= today && event_to_date >= today ){
+                date_validity=1;
+              }
+              else{
+                date_validity=0;
+              }
+              if(result && this.mentor_array.length && date_validity){
 
-                // axios.put('http://127.0.0.1:5000/update/'+this.select_webinar, {
-                //     "title":this.title,
-                //     "topic":this.topic,
-                //     "description":this.description,
-                //     "start_time":this.start_time,
-                //     "duration":this.duration,
-                //     "course":this.course,
-                //     "category":this.category,
-                //     "requirement":this.requirement,
-                //     "address":this.address.city,
-                //     "mentor":this.mentorProfiles,
-                //     "about_the_seminar":this.about_the_seminar,
-                //     "seminar_date":this.date
+                axios.put('http://127.0.0.1:5000/update/'+this.webinar_id, {
+                    "event_type":this.event_type,
+                    "event_category":this.event_category,
+                    "product_category":this.product_category,
+                    "title":this.title,
+                    "topic":this.topic,
+                    "description":this.description,
+                    "from_date":this.from_date,
+                    "from_time":this.from_time,
+                    "to_date":this.to_date,
+                    "to_time":this.to_time,
+                    "city":this.cityname,
+                    "address":this.address,
+                    "google_link":this.google_link,
+                    "about_the_event":this.about_the_event,
+                    "url":this.url,
+                    "event_cost":this.event_cost,
+                    "timezone":this.timezone,
+                    "sub_heading_array":this.sub_heading_array,
+                    "mentor_array":this.mentor_array,
+                    "status":this.status,
+                    "video_url":this.video_url
 
-                //   })
-                //   .then(function (response) {
-                //     console.log(response);
-                //   })
-                //   .catch(function (error) {
-                //     console.log(error);
+                  })
+                  .then(function (response) {
+                    log(response.data);
+                    if(response.data.msg==='valid'){
+                       sflash('Webinar updated');
+                    }
+                    else if(response.data.msg==='invalid'){
+                      sflash('Please try again','error');
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
                     
-                //   });
+                  });
 
               }
+              else if(date_validity==0)
+                sflash('Please enter valid date','error');
+              else if(this.mentor_array.length==0)
+                sflash('Please enter mentors','error');
+              else
+                sflash('Please fill up all the fields','error');
               
             }
         }
