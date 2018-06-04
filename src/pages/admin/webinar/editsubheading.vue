@@ -24,7 +24,6 @@
                  <tinymce :id="'sp_sp' + index"  v-model="profile.descripion" v-validate="'required'"
                  name="description"
                  :has-error="errors.has('description')"></tinymce>
-                
             </div>
             
           </div>
