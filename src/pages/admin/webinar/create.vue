@@ -43,7 +43,7 @@
                          <div class="row">
                             <div class="col">
                                 <label for="title">Title<sup style="color:red">*</sup></label>
-                                 <input v-model="title" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="title" name="title" class="form-control">
+                                 <input v-model="title" v-validate="{ required: true }" type="text" id="title" name="title" class="form-control">
                                   <span v-show="errors.has('title')"
                                           class="help text-danger">
                                         {{ errors.first('title') }}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col">
                                 <label for="topic">Topic<sup style="color:red">*</sup></label>
-                                 <input v-model="topic" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="topic" name="topic" class="form-control">
+                                 <input v-model="topic" v-validate="{ required: true }" type="text" id="topic" name="topic" class="form-control">
                                   <span v-show="errors.has('topic')"
                                           class="help text-danger">
                                         {{ errors.first('topic') }}
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col">
                                <label for="descrption">Descrption<sup style="color:red">*</sup></label>
-                                 <input v-model="description" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="descrption" name="descrption" class="form-control">
+                                 <input v-model="description" v-validate="{ required: true }" type="text" id="descrption" name="descrption" class="form-control">
                                   <span v-show="errors.has('descrption')"
                                           class="help text-danger">
                                         {{ errors.first('descrption') }}
@@ -115,7 +115,7 @@
                          <div class="row">
                             <div class="col">
                                    <label for="url">URL<sup style="color:red">*</sup></label>
-                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control">
+                                   <input v-model="url" v-validate="{ required: true }" type="text" id="url" name="url" class="form-control">
                                     <span v-show="errors.has('url')"
                                             class="help text-danger">
                                           {{ errors.first('url') }}
@@ -123,7 +123,7 @@
                             </div>
                             <div class="col">
                                    <label for="event_cost">Event Cost<sup style="color:red">*</sup></label>
-                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control">
+                                   <input v-model="event_cost" v-validate="{ required: true,  regex: /^[+-]?([0-9]*[.])?[0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control">
                                     <span v-show="errors.has('event_cost')"
                                             class="help text-danger">
                                           {{ errors.first('event_cost') }}
@@ -153,7 +153,7 @@
                             </div>
                             <div class="col">
                                  <label for="address">Address<sup style="color:red">*</sup></label>
-                                 <input v-model="address" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="address" name="address" class="form-control">
+                                 <input v-model="address" v-validate="{ required: true }" type="text" id="address" name="address" class="form-control">
                                   <span v-show="errors.has('address')"
                                           class="help text-danger">
                                         {{ errors.first('address') }}
@@ -306,46 +306,48 @@
               {
                 this.cityname=this.city.city;
               }
-              console.log(this.cityname)
+              let vm=this;
               if(result && this.mentorProfiles.length){
 
-                // axios.post('http://127.0.0.1:5000/add', {
+                axios.post('http://127.0.0.1:5000/add', {
           
-                //     "event_type":this.event_type,
-                //     "event_category":this.event_category,
-                //     "product_category":this.product_category,
-                //     "title":this.title,
-                //     "topic":this.topic,
-                //     "description":this.description,
-                //     "from_date":this.from_date,
-                //     "from_time":this.from_time,
-                //     "to_date":this.to_date,
-                //     "to_time":this.to_time,
-                //     "city":this.cityname,
-                //     "address":this.address,
-                //     "google_link":this.google_link,
-                //     "about_the_event":this.about_the_event,
-                //     "url":this.url,
-                //     "event_cost":this.event_cost,
-                //     "timezone":this.timezone,
-                //     "sub_heading_array":this.sub_heading_array,
-                //     "mentor_array":this.mentorProfiles,
-                //     "status":"ready_for_producton"
+                    "event_type":this.event_type,
+                    "event_category":this.event_category,
+                    "product_category":this.product_category,
+                    "title":this.title,
+                    "topic":this.topic,
+                    "description":this.description,
+                    "from_date":this.from_date,
+                    "from_time":this.from_time,
+                    "to_date":this.to_date,
+                    "to_time":this.to_time,
+                    "city":this.cityname,
+                    "address":this.address,
+                    "google_link":this.google_link,
+                    "about_the_event":this.about_the_event,
+                    "url":this.url,
+                    "event_cost":this.event_cost,
+                    "timezone":this.timezone,
+                    "sub_heading_array":this.sub_heading_array,
+                    "mentor_array":this.mentorProfiles,
+                    "status":"ready_for_producton"
 
-                //   })
-                //   .then(function (response) {
-                //     if(response.data.message==='valid'){
-                //        sflash('Webinar created');
-                //     }
-                //     else if(response.data.message==='invalid'){
-                //       sflash('Please try again','error');
-                //     }
-                //   })
-                //   .catch(function (error) {
-                //     console.log(error);
+                  })
+                  .then(function (response) {
+                    if(response.data.message==='valid'){
+                       sflash('Webinar created');
+                       vm.$router.push({ name: 'management.webinar.index'})
+
+                    }
+                    else if(response.data.message==='invalid'){
+                      sflash('Please try again','error');
+                    }
+                  })
+                  .catch(function (error) {
+                    console.log(error);
                     
-                //   });
-                $router.push({ name: 'management.webinar.index'})
+                  });
+
 
               }
               else if(this.mentorProfiles.length==0)

@@ -9,15 +9,15 @@
           <div class="row">
           <div class="col">
             <label for="mentorname"> Mentor Name<sup style="color:red">*</sup></label>
-            <input v-model="profile.mentor_name" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="mentor_name" name="mentor_name" class="form-control">
+            <input v-model="profile.mentor_name" v-validate="{ required: true }" type="text" id="mentor_name" name="mentor_name" class="form-control">
           </div>
           <div class="col">
             <label for="mentordesignation"> Mentor Designation<sup style="color:red">*</sup></label>
-            <input v-model="profile.mentor_designation" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="mentor_designation" name="mentor_designation" class="form-control">
+            <input v-model="profile.mentor_designation" v-validate="{ required: true }" type="text" id="mentor_designation" name="mentor_designation" class="form-control">
           </div>
           <div class="col">
             <label for="mentorcompany"> Mentor Company<sup style="color:red">*</sup></label>
-            <input v-model="profile.mentor_company" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="mentor_company" name="mentor_company" class="form-control">
+            <input v-model="profile.mentor_company" v-validate="{ required: true }" type="text" id="mentor_company" name="mentor_company" class="form-control">
           </div>
     </div>
     <div class="row">

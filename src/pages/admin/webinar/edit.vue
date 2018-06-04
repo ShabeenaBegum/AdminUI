@@ -43,7 +43,7 @@
                          <div class="row">
                             <div class="col">
                                 <label for="title">Title<sup style="color:red">*</sup></label>
-                                 <input v-model="title" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="title" name="title" class="form-control" :disabled="status==='completed'">
+                                 <input v-model="title" v-validate="{ required: true }" type="text" id="title" name="title" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('title')"
                                           class="help text-danger">
                                         {{ errors.first('title') }}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="col">
                                 <label for="topic">Topic<sup style="color:red">*</sup></label>
-                                 <input v-model="topic" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="topic" name="topic" class="form-control" :disabled="status==='completed'">
+                                 <input v-model="topic" v-validate="{ required: true }" type="text" id="topic" name="topic" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('topic')"
                                           class="help text-danger">
                                         {{ errors.first('topic') }}
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col">
                                <label for="descrption">Descrption<sup style="color:red">*</sup></label>
-                                 <input v-model="description" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="descrption" name="descrption" class="form-control" :disabled="status==='completed'">
+                                 <input v-model="description" v-validate="{ required: true}" type="text" id="descrption" name="descrption" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('descrption')"
                                           class="help text-danger">
                                         {{ errors.first('descrption') }}
@@ -115,7 +115,7 @@
                          <div class="row">
                             <div class="col">
                                    <label for="url">URL<sup style="color:red">*</sup></label>
-                                   <input v-model="url" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="url" name="url" class="form-control" :disabled="status==='completed'">
+                                   <input v-model="url" v-validate="{ required: true }" type="text" id="url" name="url" class="form-control" :disabled="status==='completed'">
                                     <span v-show="errors.has('url')"
                                             class="help text-danger">
                                           {{ errors.first('url') }}
@@ -123,7 +123,7 @@
                             </div>
                             <div class="col">
                                    <label for="event_cost">Event Cost<sup style="color:red">*</sup></label>
-                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[0-9][0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control" :disabled="status==='completed'">
+                                   <input v-model="event_cost" v-validate="{ required: true, regex: /^[+-]?([0-9]*[.])?[0-9]*$/ }" type="text" id="event_cost" name="event_cost" class="form-control" :disabled="status==='completed'">
                                     <span v-show="errors.has('event_cost')"
                                             class="help text-danger">
                                           {{ errors.first('event_cost') }}
@@ -153,7 +153,7 @@
                             </div>
                             <div class="col">
                                  <label for="address">Address<sup style="color:red">*</sup></label>
-                                 <input v-model="address" v-validate="{ required: true, regex: /^[a-zA-Z][a-zA-Z0-4.,--, ,_,$;]*$/ }" type="text" id="address" name="address" class="form-control" :disabled="status==='completed'">
+                                 <input v-model="address" v-validate="{ required: true }" type="text" id="address" name="address" class="form-control" :disabled="status==='completed'">
                                   <span v-show="errors.has('address')"
                                           class="help text-danger">
                                         {{ errors.first('address') }}
