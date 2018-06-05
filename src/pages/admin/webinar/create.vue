@@ -205,16 +205,10 @@
                           <div class="row">
                               <div class="col-md-5">
                                 <label for="mentor_search">Mentor Search<sup style="color:red">*</sup></label>
-                                 <!-- <select id="mentor_search" name="mentor_search" v-model="mentor_search" class="form-control" >
-                                            <option disabled value="">Please select one</option>
-                                            <option value="mentor1">mentor1</option>
-                                            <option value="mentor2">mentor2</option>
-                                            <option value="mentor3">mentor3</option>
-                                 </select> -->
                                  <multiselect
                                             class="mr-4"
                                             v-model="selected"
-                                            placeholder="Select Course"
+                                            placeholder="Select Mentors"
                                             :options="mentors"
                                             :multiple="true"
                                             label="name" track-by="name"
@@ -299,7 +293,7 @@
                 mentorProfiles:[],
                 mentor_search:'',
                 mentorrange:0,
-                mentors:[{ "name":"pankaj", "_id":"4a5d5fg85dr"},{ "name":"aakar","_id":"a8jkyu"}]
+                mentors:[{ "name":"shabeena", "_id":"4a5d5fg85dd"},{ "name":"pankaj", "_id":"4a5d5fg85dr"},{ "name":"aakar","_id":"a8jkyu"}]
             }
         },
         methods: {
