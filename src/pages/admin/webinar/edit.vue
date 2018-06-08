@@ -303,27 +303,26 @@
                   })
                   .then(function (response) {
                     
-                    // console.log(response.data.data);
-                    vm.about_the_event=response.data.data.about_the_event
-                    vm.address=response.data.data.address
-                    vm.city=response.data.data.city
-                    vm.description=response.data.data.description
-                    vm.event_category=response.data.data.event_category
-                    vm.event_cost=response.data.data.event_cost
-                    vm.event_type=response.data.data.event_type
-                    vm.from_date=response.data.data.from_date
-                    vm.from_time=response.data.data.from_time
-                    vm.google_link=response.data.data.google_link
-                    vm.mentor_array=response.data.data.mentor_array
-                    vm.product_category=response.data.data.product_category
-                    vm.status=response.data.data.status
-                    vm.sub_heading_array=response.data.data.sub_heading_array
-                    vm.timezone=response.data.data.timezone
-                    vm.title=response.data.data.title
-                    vm.to_date=response.data.data.to_date
-                    vm.to_time=response.data.data.to_time
-                    vm.topic=response.data.data.topic
-                    vm.url=response.data.data.url
+                    vm.about_the_event=response.data.data[0].about_the_event
+                    vm.address=response.data.data[0].address
+                    vm.city=response.data.data[0].city
+                    vm.description=response.data.data[0].description
+                    vm.event_category=response.data.data[0].event_category
+                    vm.event_cost=response.data.data[0].event_cost
+                    vm.event_type=response.data.data[0].event_type
+                    vm.from_date=response.data.data[0].from_date
+                    vm.from_time=response.data.data[0].from_time
+                    vm.google_link=response.data.data[0].google_link
+                    // vm.mentor_array=response.data.data[0].mentor_array
+                    vm.product_category=response.data.data[0].product_category
+                    vm.status=response.data.data[0].status
+                    vm.sub_heading_array=response.data.data[0].sub_heading_array
+                    vm.timezone=response.data.data[0].timezone
+                    vm.title=response.data.data[0].title
+                    vm.to_date=response.data.data[0].to_date
+                    vm.to_time=response.data.data[0].to_time
+                    vm.topic=response.data.data[0].topic
+                    vm.url=response.data.data[0].url
                     // console.log(vm.sub_heading_array);
                   })
                   .catch(function (error) {
@@ -339,8 +338,10 @@
             },
             addMentor(data){
                 let vm = this;
-                vm.mentor_array.push(data);
-                vm.shwAddMentor = false;
+                console.log(data)
+                console.log(this.mentor_array)
+                this.mentor_array.push(data);
+                this.shwAddMentor = false;
             },
             editMentor(data, id){
 
@@ -373,7 +374,7 @@
                 date_validity=0;
               }
               if(result && this.mentor_array.length && date_validity){
-
+              // if(result  && date_validity){
                 axios.put('http://127.0.0.1:5000/update/'+this.webinar_id, {
                     "event_type":this.event_type,
                     "event_category":this.event_category,
@@ -400,10 +401,10 @@
                   })
                   .then(function (response) {
                     log(response.data);
-                    if(response.data.msg==='valid'){
+                    if(response.data.msg===1){
                        sflash('Webinar updated');
                     }
-                    else if(response.data.msg==='invalid'){
+                    else if(response.data.msg===0){
                       sflash('Please try again','error');
                     }
                   })

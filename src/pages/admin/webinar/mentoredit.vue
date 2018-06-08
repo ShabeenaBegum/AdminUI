@@ -62,7 +62,7 @@
 <script>
 
  export default {
-  name:"Mentorrrrrr",
+  name:"mentoredit",
   props: ['one','currentindex'],
   data() {
             return{

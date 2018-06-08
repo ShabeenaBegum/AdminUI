@@ -212,7 +212,7 @@
                                             :options="mentors"
                                             :multiple="true"
                                             label="name" track-by="name"
-                                            v-validate="'required'" data-vv-value-path="innerValue" data-vv-name="course">
+                                            data-vv-value-path="innerValue" data-vv-name="mentors">
                                         <template slot="singleLabel" slot-scope="{ option }">
                                             <span :class="{inactiveOption: !option.active}">
                                                 {{ option.name }}
@@ -293,6 +293,7 @@
                 mentorProfiles:[],
                 mentor_search:'',
                 mentorrange:0,
+                selected:'',
                 mentors:[{ "name":"shabeena", "_id":"4a5d5fg85dd"},{ "name":"pankaj", "_id":"4a5d5fg85dr"},{ "name":"aakar","_id":"a8jkyu"}]
             }
         },
@@ -349,12 +350,12 @@
 
                   })
                   .then(function (response) {
-                    if(response.data.message==='valid'){
+                    if(response.data.msg=== 1){
                        sflash('Webinar created');
                        vm.$router.push({ name: 'management.webinar.index'})
 
                     }
-                    else if(response.data.message==='invalid'){
+                    else if(response.data.msg===0){
                       sflash('Please try again','error');
                     }
                   })
